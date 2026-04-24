@@ -94,7 +94,7 @@ export class LinkItem extends LitElement {
         <div class="actions">
             <span class="short">/${this.slug}</span>
             <button class="copy ${this._copied ? 'copied' : ''}" @click="${this._copy}">
-            ${this._copied ? '✓ copied' : 'copy link'}
+            ${this._copied ? '✓ copied' : 'copy short link'}
             </button>
             <button class="share" ?hidden="${!navigator.share}" @click="${this._share}">share</button>
         </div>

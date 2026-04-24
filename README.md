@@ -2,9 +2,7 @@
 
 https://whatci.org/
 
-A Cloudflare Pages site that doubles as a URL shortener. Edit one file to add short links.
-
-At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage. The copy button copies the full short URL to the clipboard; the share button (on supported devices) opens the system share dialog.
+A Cloudflare Pages site and URL shortener.
 
 ## Usage
 
@@ -24,3 +22,4 @@ Edit [`links.jsonc`](links.jsonc) to add or change links:
 }
 ```
 
+At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage.

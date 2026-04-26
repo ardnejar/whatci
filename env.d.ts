@@ -1,1 +1,3 @@
-// for type declarations related to environment variables
+// type declarations for environment variables
+// and Vite's import meta
+/// <reference types="vite/client" />

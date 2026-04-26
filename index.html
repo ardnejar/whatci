@@ -10,7 +10,7 @@
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://whatci.org/" />
-    
+
 
     <style>
         *, *::before, *::after { box-sizing: border-box; }
@@ -21,7 +21,7 @@
             align-items: center;
             justify-content: center;
             padding: 2rem 1.5rem;
-            background: #fdebd5;
+            background: #ffffff;
             color: #1a1a1a;
         }
         main {
@@ -43,7 +43,14 @@
         .links {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+        }
+        link-item + link-item {
+            border-top: 1px solid #e0e0e0;
+        }
+        @media (prefers-color-scheme: dark) {
+            body { background: #000; color: #fff; }
+            .message a { color: #6ea8ff; }
+            link-item + link-item { border-top-color: #333; }
         }
     </style>
 </head>

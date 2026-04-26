@@ -34,8 +34,8 @@
     "redirect": true, 
     "webpage": false 
   },
+  "carmen": { "label": "Events and Introspection by Carmen Serber", "url": "https://www.carmenserber.com/", "redirect": true, "webpage": true },
   "facebook": { "label": "Facebook, Bellingham Contact Improvisation", "url": "https://www.facebook.com/bellinghamcontact", "redirect": true, "webpage": true },
-  "carmen": { "label": "Events and writing from Carmen Serber", "url": "https://www.carmenserber.com/", "redirect": true, "webpage": true },
   "newsletter": { "label": "Subscribe to the Email Newsletter to get the latest updates", "url": "https://www.carmenserber.com/#/portal/newsletters", "redirect": true, "webpage": true },
   "signal": { "label": "Signal Group", "url": "https://signal.group/#CjQKIG5n9sZt8YhH2mL7Xo3u1q0e7v6aGgkJ", "redirect": true, "webpage": false }
 }

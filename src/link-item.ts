@@ -14,9 +14,8 @@ export class LinkItem extends LitElement {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            background: #fff;
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
+            background: #ffffff;
+            padding: 1.2rem 2rem 2rem 0.4rem;
             flex-wrap: nowrap;
             flex-direction: column;
             align-items: flex-start;
@@ -28,12 +27,8 @@ export class LinkItem extends LitElement {
             text-decoration: none;
         }
         a.destination:hover { text-decoration: underline; }
-        a.short {
+        .short {
             font-family: ui-monospace, monospace;
-            color: #555;
-            font-size: 0.875rem;
-            text-decoration: none;
-            word-break: break-all;
         }
         .actions {
             display: flex;
@@ -44,10 +39,9 @@ export class LinkItem extends LitElement {
         span.short {
             flex: 1;
         }
-        .copy {
+        button {
             padding: 0.25rem 0.6rem;
             font-size: 0.75rem;
-            font-family: ui-monospace, monospace;
             border: 1px solid #e0e0e0;
             border-radius: 5px;
             background: #f3f3f3;
@@ -56,22 +50,18 @@ export class LinkItem extends LitElement {
             white-space: nowrap;
             transition: background 0.15s, color 0.15s, border-color 0.15s;
         }
-        .copy:hover { background: #e8e8e8; }
-        .copy.copied { background: #d4f5e2; color: #1a7a43; border-color: #a8dfc0; }
-        .share {
-            padding: 0.25rem 0.6rem;
-            font-size: 0.75rem;
-            font-family: ui-monospace, monospace;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            background: #f3f3f3;
-            color: #555;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.15s, color 0.15s;
+        button:hover { background: #e8e8e8; }
+        button.copied { background: #d4f5e2; color: #1a7a43; border-color: #a8dfc0; }
+        button[hidden] { display: none; }
+        @media (prefers-color-scheme: dark) {
+            :host { background: #000; }
+            .note { color: #aaa; }
+            span.short { color: #aaa; }
+            a.destination { color: #6ea8ff; }
+            button { background: #1a1a1a; border-color: #333; color: #aaa; }
+            button:hover { background: #222; }
+            button.copied { background: #0d2b1a; color: #4caf7d; border-color: #1a4a2e; }
         }
-        .share:hover { background: #e8e8e8; }
-        .share[hidden] { display: none; }
     `;
 
     private async _copy(): Promise<void> {
@@ -94,7 +84,7 @@ export class LinkItem extends LitElement {
         <div class="actions">
             <span class="short">/${this.slug}</span>
             <button class="copy ${this._copied ? 'copied' : ''}" @click="${this._copy}">
-            ${this._copied ? '✓ copied' : 'copy short link'}
+            ${this._copied ? '✓ copied' : 'copy link'}
             </button>
             <button class="share" ?hidden="${!navigator.share}" @click="${this._share}">share</button>
         </div>

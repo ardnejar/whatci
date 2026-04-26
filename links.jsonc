@@ -13,29 +13,49 @@
     Slugs are case-sensitive.
 **/
 {
-  "calendar": { 
-    "label": "Google Calendar", 
-    "url": "https://calendar.google.com/calendar/embed?src=7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com&ctz=America%2FLos_Angeles", 
+  "calendar": {
+    "label": "Google Calendar",
+    "url": "https://calendar.google.com/calendar/embed?src=7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com&ctz=America%2FLos_Angeles",
     "note": "Subscribe with the \"Add to Google Calendar\" link on the calendar page.",
-    "redirect": true, 
-    "webpage": true 
+    "redirect": true,
+    "webpage": true
   },
-  "calendar-subscribe": { 
-    "label": "Google Calendar Subscribe", 
-    "url": "https://calendar.google.com/calendar/u/0?cid=N3U5MDQzZnI5aXIxcjRkZ3RxbTAzamNpdnNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ", 
-    "note": "Subscribe directly with Google Calendar (requires login).", 
-    "redirect": true, 
-    "webpage": false 
+  "calendar-subscribe": {
+    "label": "Google Calendar Subscribe",
+    "url": "https://calendar.google.com/calendar/u/0?cid=N3U5MDQzZnI5aXIxcjRkZ3RxbTAzamNpdnNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ",
+    "note": "Subscribe directly with Google Calendar (requires login).",
+    "redirect": true,
+    "webpage": false
   },
-  "ical": { 
-    "label": "Subscribe to Calendar without Google Account", 
-    "url": "https://calendar.google.com/calendar/ical/7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com/public/basic.ics", 
-    "note": "Subscribe with any app or device that supports iCal.", 
-    "redirect": true, 
-    "webpage": false 
+  "ical": {
+    "label": "Subscribe to Calendar without Google Account",
+    "url": "https://calendar.google.com/calendar/ical/7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com/public/basic.ics",
+    "note": "Subscribe with any app or device that supports iCal.",
+    "redirect": true,
+    "webpage": false
   },
-  "carmen": { "label": "Events and Introspection by Carmen Serber", "url": "https://www.carmenserber.com/", "redirect": true, "webpage": true },
-  "facebook": { "label": "Facebook, Bellingham Contact Improvisation", "url": "https://www.facebook.com/bellinghamcontact", "redirect": true, "webpage": true },
-  "newsletter": { "label": "Subscribe to the Email Newsletter to get the latest updates", "url": "https://www.carmenserber.com/#/portal/newsletters", "redirect": true, "webpage": true },
-  "signal": { "label": "Signal Group", "url": "https://signal.group/#CjQKIG5n9sZt8YhH2mL7Xo3u1q0e7v6aGgkJ", "redirect": true, "webpage": false }
+  "carmen": {
+    "label": "Events and Introspection by Carmen Serber",
+    "url": "https://www.carmenserber.com/",
+    "redirect": true,
+    "webpage": true
+  },
+  "facebook": {
+    "label": "Facebook, Bellingham Contact Improvisation",
+    "url": "https://www.facebook.com/bellinghamcontact",
+    "redirect": true,
+    "webpage": true
+  },
+  "newsletter": {
+    "label": "Subscribe to the Email Newsletter to get the latest updates",
+    "url": "https://www.carmenserber.com/#/portal/newsletters",
+    "redirect": true,
+    "webpage": true
+  },
+  "signal": {
+    "label": "Signal Group",
+    "url": "https://signal.group/#CjQKIG8Zqdkn7JQlXWVHBsityLFIl_PJw-e5AUm-kBo68D0nEhDMf_WdnGhXobXY5w_N2ul2",
+    "redirect": true,
+    "webpage": false
+  }
 }

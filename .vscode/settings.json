@@ -1,0 +1,12 @@
+{
+  "eslint.run": "onType",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "editor.formatOnSave": true,
+  "prettier.configPath": "./prettier.config.cjs",
+  "prettier.requireConfig": true,
+  "files.associations": {
+    "*.jsonc": "jsonc"
+  }
+}

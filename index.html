@@ -1,64 +1,77 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>What CI</title>
-    <meta
-      name="description"
-      content="Contact Improvisation in and around Whatcom County, WA"
-    />
+    <meta name="description" content="Contact Improvisation in and around Whatcom County, WA" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://whatci.org/" />
 
-
     <style>
-        *, *::before, *::after { box-sizing: border-box; }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1.5rem;
+        background: #ffffff;
+        color: #1a1a1a;
+      }
+      main {
+        width: 100%;
+        max-width: 720px;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+      .message {
+        margin-bottom: 2rem;
+        line-height: 1.6;
+      }
+      .message p {
+        margin: 0 0 0.75rem;
+      }
+      .message p:last-child {
+        margin-bottom: 0;
+      }
+      .message a {
+        color: #0057d8;
+      }
+      .links {
+        display: flex;
+        flex-direction: column;
+      }
+      link-item + link-item {
+        border-top: 1px solid #e0e0e0;
+      }
+      @media (prefers-color-scheme: dark) {
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem 1.5rem;
-            background: #ffffff;
-            color: #1a1a1a;
+          background: #000;
+          color: #fff;
         }
-        main {
-            width: 100%;
-            max-width: 720px;
-        }
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .message {
-            margin-bottom: 2rem;
-            line-height: 1.6;
-        }
-        .message p { margin: 0 0 0.75rem; }
-        .message p:last-child { margin-bottom: 0; }
-        .message a { color: #0057d8; }
-        .links {
-            display: flex;
-            flex-direction: column;
+        .message a {
+          color: #6ea8ff;
         }
         link-item + link-item {
-            border-top: 1px solid #e0e0e0;
+          border-top-color: #333;
         }
-        @media (prefers-color-scheme: dark) {
-            body { background: #000; color: #fff; }
-            .message a { color: #6ea8ff; }
-            link-item + link-item { border-top-color: #333; }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <main>
-        %VITE_MESSAGE%
-        <div id="links" class="links"></div>
-        <script type="module" src="/src/main.ts"></script>
+      %VITE_MESSAGE%
+      <div id="links" class="links"></div>
+      <script type="module" src="/src/main.ts"></script>
     </main>
-</body>
+  </body>
 </html>

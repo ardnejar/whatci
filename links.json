@@ -1,17 +1,3 @@
-/**
-    Short link map used in home page and as Cloudflare redirect.
- 
-    Format:
-      "slug": { 
-        "label": "Label", 
-        "url": "https://destination-url",
-        "note": "Additional note to display on home page (optional)"
-        "redirect": true (optional, default false) - if true, this link will be used for Cloudflare redirect
-        "webpage": true (optional, default false) - if true, this link will be rendered on the home page
-      } ,
- 
-    Slugs are case-sensitive.
-**/
 {
   "calendar": {
     "label": "Google Calendar",

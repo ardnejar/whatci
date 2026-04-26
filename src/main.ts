@@ -1,4 +1,4 @@
-import links from '../links.jsonc'
+import links from '../links.json'
 import './link-item.js'
 
 interface LinkEntry {

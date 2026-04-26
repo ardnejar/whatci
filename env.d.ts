@@ -1,4 +1,1 @@
-declare module '*.jsonc' {
-  const value: Record<string, unknown>
-  export default value
-}
+// for type declarations related to environment variables

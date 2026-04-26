@@ -8,7 +8,7 @@ A Cloudflare Pages site and URL shortener.
 
 Edit [`message.md`](message.md) to change the text shown above the links on the index page. Supports full Markdown.
 
-Edit [`links.jsonc`](links.jsonc) to add or change links:
+Edit [`links.json`](links.json) to add or change links:
 
 ```jsonc
 {
@@ -21,5 +21,7 @@ Edit [`links.jsonc`](links.jsonc) to add or change links:
     }
 }
 ```
+
+## Build
 
 At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage.

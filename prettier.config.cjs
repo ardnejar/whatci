@@ -6,12 +6,4 @@ module.exports = {
   tabWidth: 2,
   printWidth: 130,
   semi: false,
-  overrides: [
-    {
-      files: '*.jsonc',
-      options: {
-        trailingComma: 'none',
-      },
-    },
-  ],
 }

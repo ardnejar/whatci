@@ -5,8 +5,5 @@
   },
   "editor.formatOnSave": true,
   "prettier.configPath": "./prettier.config.cjs",
-  "prettier.requireConfig": true,
-  "files.associations": {
-    "*.jsonc": "jsonc"
-  }
+  "prettier.requireConfig": true
 }

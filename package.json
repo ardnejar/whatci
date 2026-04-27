@@ -2,17 +2,19 @@
   "name": "whatci",
   "private": true,
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "What CI website and tools",
   "scripts": {
     "dev": "vite --port 5788",
     "dev:wrangler": "mkdir -p dist && wrangler pages dev --port 8788",
-    "fetch-cal": "node --experimental-strip-types scripts/fetch-calendar.ts",
+    "fetch-kv": "WRANGLER_PORT=8788 node --experimental-strip-types scripts/fetch-kv.ts",
+    "fetch-cal": "node --experimental-strip-types scripts/fetch-cal.ts",
     "build": "vite build",
     "deploy": "vite build && wrangler pages deploy dist"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.33.2",
+    "@cloudflare/workers-types": "^4.20260426.1",
     "@types/node": "^25.6.0",
     "eslint-plugin-simple-import-sort": "^13.0.0",
     "marked": "^18.0.2",

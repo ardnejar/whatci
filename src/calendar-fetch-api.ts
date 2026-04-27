@@ -1,40 +1,29 @@
-import type { CalendarEvent } from './EventStore'
-import { EventStore } from './EventStore'
-import { mergeEvents } from './core/event-utils'
+import type { CalendarEvent } from './core/types.ts'
+import { mergeEvents } from './core/event-utils.ts'
 
-export class CalendarFetchApi extends EventStore {
-  override store = 'calendar-events'
+export class CalendarFetchApi {
+  private _events: CalendarEvent[] = []
+  private _fetched = false
 
   async fetch(): Promise<void> {
     const response = await fetch('/calendar-events')
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}))
-      const errorMsg = errorData.error?.message || response.statusText
-      throw new Error(`Failed to fetch calendar (${response.status}): ${errorMsg}`)
+      const error_data = (await response.json().catch(() => ({}))) as { error?: { message?: string } }
+      const error_msg = error_data.error?.message || response.statusText
+      throw new Error(`Failed to fetch calendar (${response.status}): ${error_msg}`)
     }
 
-    const data = await response.json()
-
-    const events: CalendarEvent[] = data.items.map((item: any) => ({
-      summary: item.summary || 'No Title',
-      description: item.description || null,
-      startDate: item.start.dateTime || item.start.date,
-      endDate: item.end.dateTime || item.end.date,
-      location: item.location || null,
-      uid: item.id,
-      recurringEventId: item.recurringEventId ?? null,
-      attendees: item.attendees ? item.attendees.map((a: any) => a.email) : [],
-      isRecurring: !!item.recurringEventId,
-      url: null,
-    }))
-
-    this.saveEvents(events)
+    this._events = (await response.json()) as CalendarEvent[]
+    this._fetched = true
     window.dispatchEvent(new CustomEvent('calendar-updated'))
-    this.saveLastFetch()
+  }
+
+  get eventCount(): number | null {
+    return this._fetched ? this._events.length : null
   }
 
   getAll(start_date: Date, end_date: Date): CalendarEvent[] {
-    return this.loadEvents().filter((e) => {
+    return this._events.filter((e) => {
       const start = new Date(e.startDate)
       return start >= start_date && start <= end_date
     })

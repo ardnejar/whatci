@@ -2,6 +2,10 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
+import { loadDevVars } from './lib/load-dev-vars.ts'
+
+await loadDevVars()
+
 const port = process.env.WRANGLER_PORT
 if (!port) {
   console.error('WRANGLER_PORT is not set. Run the wrangler dev server first.')
@@ -18,10 +22,10 @@ if (!response.ok) {
 
 const body = await response.text()
 
-const outDir = join(import.meta.dirname, '..', 'test', 'output')
-await mkdir(outDir, { recursive: true })
+const out_dir = join(import.meta.dirname, '..', 'test', 'output')
+await mkdir(out_dir, { recursive: true })
 
-const outFile = join(outDir, 'calendar-events.json')
-await writeFile(outFile, body, 'utf-8')
+const out_file = join(out_dir, 'calendar-events.json')
+await writeFile(out_file, body, 'utf-8')
 
-console.log(`Saved to ${outFile}`)
+console.log(`Saved to ${out_file}`)

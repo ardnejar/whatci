@@ -30,7 +30,7 @@ export class EventList extends LitElement {
     const now = new Date()
     const end_date = new Date(now.getFullYear(), now.getMonth() + 6, 0)
     this.what_events = this.calendarFetcherAPI.getFirstOccurrences(now, end_date)
-    console.log('Loaded G events', this.what_events.length, this.what_events)
+    console.log('Loaded Google Calendar events', this.what_events.length, this.what_events)
     this.requestUpdate()
   }
 

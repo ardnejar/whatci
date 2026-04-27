@@ -27,7 +27,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["src", "scripts", "env.d.ts"],
+  "include": ["src", "scripts", "functions", "env.d.ts"],
   "ts-node": {
     "esm": true,
     "compilerOptions": {

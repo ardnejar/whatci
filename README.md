@@ -22,6 +22,10 @@ Edit [`links.json`](links.json) to add or change links:
 }
 ```
 
+## Development
+
+Use the port from `dev:functions` to test local redirects.
+
 ## Build
 
 At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage.

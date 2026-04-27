@@ -8,5 +8,10 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
+  server: {
+    proxy: {
+      '/calendar-events': 'http://localhost:8788',
+    },
+  },
   plugins: [message(), shortlinks()],
 })

@@ -1,4 +1,22 @@
 {
+  "carmen": {
+    "label": "Events and Introspection by Carmen Serber",
+    "url": "https://www.carmenserber.com/",
+    "redirect": true,
+    "webpage": true
+  },
+  "facebook": {
+    "label": "Facebook, Bellingham Contact Improvisation",
+    "url": "https://www.facebook.com/bellinghamcontact",
+    "redirect": true,
+    "webpage": true
+  },
+  "newsletter": {
+    "label": "Subscribe to the Email Newsletter to get the latest updates",
+    "url": "https://www.carmenserber.com/#/portal/newsletters",
+    "redirect": true,
+    "webpage": true
+  },
   "calendar": {
     "label": "Google Calendar",
     "url": "https://calendar.google.com/calendar/embed?src=7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com&ctz=America%2FLos_Angeles",
@@ -19,24 +37,6 @@
     "note": "Subscribe with any app or device that supports iCal.",
     "redirect": true,
     "webpage": false
-  },
-  "carmen": {
-    "label": "Events and Introspection by Carmen Serber",
-    "url": "https://www.carmenserber.com/",
-    "redirect": true,
-    "webpage": true
-  },
-  "facebook": {
-    "label": "Facebook, Bellingham Contact Improvisation",
-    "url": "https://www.facebook.com/bellinghamcontact",
-    "redirect": true,
-    "webpage": true
-  },
-  "newsletter": {
-    "label": "Subscribe to the Email Newsletter to get the latest updates",
-    "url": "https://www.carmenserber.com/#/portal/newsletters",
-    "redirect": true,
-    "webpage": true
   },
   "signal": {
     "label": "Signal Group",

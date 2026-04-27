@@ -36,7 +36,8 @@ export class EventList extends LitElement {
     const count = this.calendarFetcherAPI.eventCount
     if (count === null) return html`<p class="empty">Not loaded</p>`
     if (count === 0) return html`<p class="empty">No upcoming events found.</p>`
-    return html`<what-summary .events=${this.what_events}></what-summary>`
+    return html`<h2>Jams and Classes</h2>
+      <what-summary .events=${this.what_events}></what-summary>`
   }
 
   render() {

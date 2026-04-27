@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite --port 5788",
     "dev:wrangler": "mkdir -p dist && wrangler pages dev --port 8788",
-    "fetch-calendar": "node --experimental-strip-types scripts/fetch-calendar.ts",
+    "fetch-cal": "node --experimental-strip-types scripts/fetch-calendar.ts",
     "build": "vite build",
     "deploy": "vite build && wrangler pages deploy dist"
   },

@@ -10,16 +10,37 @@ interface LinkEntry {
 
 const parseJson = (src: string): Record<string, LinkEntry> => JSON.parse(src)
 
+const loadRedirects = (): Map<string, string> => {
+  const links = parseJson(readFileSync('./links.json', 'utf8'))
+  return new Map(
+    Object.entries(links)
+      .filter(([, v]) => v.redirect)
+      .map(([slug, { url }]) => [`/${slug}`, url])
+  )
+}
+
 export function shortlinks(): Plugin {
   return {
     name: 'shortlinks',
 
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const redirects = loadRedirects()
+        const target = req.url ? redirects.get(req.url) : undefined
+        if (target) {
+          res.writeHead(301, { Location: target })
+          res.end()
+          return
+        }
+        next()
+      })
+    },
+
     generateBundle() {
-      const links = parseJson(readFileSync('./links.json', 'utf8'))
-      const entries = Object.entries(links).filter(([, v]) => v.redirect)
-      const lines = entries.map(([slug, { url }]) => `/${slug}\t${url}\t301`).join('\n')
+      const redirects = loadRedirects()
+      const lines = [...redirects.entries()].map(([slug, url]) => `${slug}\t${url}\t301`).join('\n')
       this.emitFile({ type: 'asset', fileName: '_redirects', source: lines + '\n' })
-      console.log(`Emitted ${entries.length} redirect(s) → _redirects`)
+      console.log(`Emitted ${redirects.size} redirect(s) → _redirects`)
     },
   }
 }

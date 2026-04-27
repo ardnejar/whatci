@@ -8,6 +8,7 @@ export interface CalendarEvent {
   startDate: string
   endDate: string
   isRecurring: boolean
+  recurringEventId: string | null
   location: string | null
   uid: string
   attendees?: string[]

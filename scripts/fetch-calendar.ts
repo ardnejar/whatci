@@ -1,7 +1,12 @@
+/// <reference types="node" />
 import { mkdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const port = process.env.WRANGLER_PORT ?? '8788'
+const port = process.env.WRANGLER_PORT
+if (!port) {
+  console.error('WRANGLER_PORT is not set. Run the wrangler dev server first.')
+  process.exit(1)
+}
 const url = `http://localhost:${port}/calendar-events`
 
 const response = await fetch(url)

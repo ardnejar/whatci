@@ -1,4 +1,5 @@
 import type { CalendarEvent } from '../src/core/types.ts'
+import { mergeEvents } from '../src/core/event-utils.ts'
 import type { Env as CalendarEnv } from './lib/google-calendar.ts'
 
 interface Env extends CalendarEnv {
@@ -39,7 +40,7 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
   const events = (await env.CALENDAR_KV.get('events', { type: 'json' })) as CalendarEvent[] | null
   if (!events || events.length === 0) return response
 
-  const json_ld = buildJsonLd(events)
+  const json_ld = buildJsonLd(mergeEvents(events))
 
   return new HTMLRewriter()
     .on('head', {

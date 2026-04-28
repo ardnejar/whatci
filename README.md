@@ -48,3 +48,28 @@ npm run dev:wrangler  # Wrangler Pages and Functions
 ## Build
 
 At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage.
+
+## Scripts
+
+Fetch raw events directly from the Google Calendar API and save to `test/output/google-calendar-raw.json`:
+
+```sh
+npm run fetch-cal
+npm run fetch-cal -- --from 2026-05-01 --to 2026-05-31
+```
+
+Fetch processed events from the local Wrangler dev server (requires `dev:wrangler` to be running) and save to `test/output/calendar-events.json`:
+
+```sh
+npm run fetch-kv
+npm run fetch-kv -- --from 2026-05-01 --to 2026-05-31
+```
+
+Use `--remote` to fetch from the production KV instead (no local server needed):
+
+```sh
+npm run fetch-kv -- --remote
+npm run fetch-kv -- --remote --from 2026-05-01 --to 2026-05-31
+```
+
+Both scripts print a summary: event count, download size, request time, and write time.

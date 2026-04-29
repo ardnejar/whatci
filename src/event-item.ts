@@ -1,6 +1,5 @@
 import { css, html, LitElement, type TemplateResult } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
-import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 
 import { formatDayShort, formatEventDate, formatTime } from './core/event-utils'
 import { type CalendarEvent } from './EventStore'
@@ -19,7 +18,7 @@ export class EventItem extends LitElement {
     if (title !== null) {
       return html`<a href="${description.trim()}" target="_blank" rel="noopener">Details at ${title}</a>`
     }
-    return html`${unsafeHTML(description.trim())}`
+    return html`${description.trim()}`
   }
 
   private renderDetails(): TemplateResult {
@@ -28,7 +27,7 @@ export class EventItem extends LitElement {
     const time_str = is_multi_day ? `${formatEventDate(e)}` : `${formatTime(e.startDate)}–${formatTime(e.endDate)}`
     const location = e.location
       ? e.location.startsWith('http')
-        ? html`<a href="${e.location}" target="_blank" rel="noopener">${e.location}</a>`
+        ? html`<a href="${e.location}" target="_blank" rel="noopener">Online Event</a>`
         : html`<span>${e.location}</span>`
       : null
 

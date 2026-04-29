@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What CI — Copy Event List</title>
+
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        padding: 2rem 1.5rem;
+        background: #ffffff;
+        color: #1a1a1a;
+      }
+      main {
+        width: 100%;
+        max-width: 720px;
+      }
+      h1 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Next 3 Months</h1>
+      <event-copy></event-copy>
+    </main>
+
+    <script type="module" src="/src/copy.ts"></script>
+  </body>
+</html>

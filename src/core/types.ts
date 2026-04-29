@@ -15,4 +15,4 @@ export interface CalendarEvent {
   url: string | null
 }
 
-export type LocationFilter = 'Bellingham' | 'Elsewhere' | undefined
+export type EventFilter = 'all' | 'first-occurrences' | 'merged'

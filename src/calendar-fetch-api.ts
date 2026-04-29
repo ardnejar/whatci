@@ -1,4 +1,4 @@
-import type { CalendarEvent } from './core/types.ts'
+import type { CalendarEvent, EventFilter } from './core/types.ts'
 import { mergeEvents } from './core/event-utils.ts'
 
 export class CalendarFetchApi {
@@ -22,6 +22,13 @@ export class CalendarFetchApi {
     return this._fetched ? this._events.length : null
   }
 
+  get(filter: EventFilter, start_date: Date, end_date: Date): CalendarEvent[] {
+    if (filter === 'all') return this.getAll(start_date, end_date)
+    if (filter === 'first-occurrences') return this.getFirstOccurrences(start_date, end_date)
+    if (filter === 'merged') return this.getMerged(start_date, end_date)
+    throw new Error(`Invalid filter: ${filter}`)
+  }
+
   getAll(start_date: Date, end_date: Date): CalendarEvent[] {
     return this._events.filter((e) => {
       const start = new Date(e.startDate)
@@ -31,7 +38,7 @@ export class CalendarFetchApi {
 
   getFirstOccurrences(start_date: Date, end_date: Date): CalendarEvent[] {
     const in_range = this.getAll(start_date, end_date).sort(
-      (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
+      (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
     )
     const seen_recurring = new Set<string>()
     const first_occurrences = in_range.filter((e) => {
@@ -41,5 +48,9 @@ export class CalendarFetchApi {
       return true
     })
     return mergeEvents(first_occurrences)
+  }
+
+  getMerged(start_date: Date, end_date: Date): CalendarEvent[] {
+    return mergeEvents(this.getAll(start_date, end_date))
   }
 }

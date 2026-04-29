@@ -135,6 +135,16 @@ export function formatTimeRange(event: CalendarEvent): string {
 }
 
 /**
+  Format date as "28 Mon" (day number + weekday short)
+**/
+export function formatDayShort(date_string: string): string {
+  const date = new Date(date_string)
+  const weekday = date.toLocaleString('en-US', { weekday: 'short' })
+  const day = date.getDate()
+  return `${weekday} ${day}`
+}
+
+/**
   Get recurring label if event is recurring
  */
 export function maybeRecurringLabel(event: CalendarEvent): string {

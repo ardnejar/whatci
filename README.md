@@ -83,3 +83,8 @@ Both scripts print a summary: event count, download size, request time, and writ
 | [/admin/refresh?token=TOKEN](/admin/refresh?token=TOKEN) | Force-refreshes the KV cache from Google Calendar. Requires `ADMIN_TOKEN`. Redirects to homepage on success. |
 | [/json-ld](/json-ld) | The schema.org `ItemList` JSON-LD payload that gets injected into the page — events for the next 6 months, merged. Useful for inspection. |
 | `/<slug>` | Redirects to the destination URL for any slug with `"redirect": true` in `links.json`. |
+
+
+# Services
+
+https://search.google.com/search-console?resource_id=sc-domain%3Awhatci.org

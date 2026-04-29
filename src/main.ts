@@ -4,7 +4,7 @@ import './link-item.js'
 interface LinkEntry {
   label: string
   url: string
-  note?: string
+  description?: string
   redirect?: boolean
   webpage?: boolean
 }
@@ -16,6 +16,6 @@ for (const [slug, entry] of Object.entries(links as Record<string, LinkEntry>)) 
   el.setAttribute('slug', slug)
   el.setAttribute('label', entry.label)
   el.setAttribute('url', entry.url)
-  el.setAttribute('note', entry.note ?? '')
+  el.setAttribute('description', entry.description ?? '')
   container.appendChild(el)
 }

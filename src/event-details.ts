@@ -68,7 +68,7 @@ export class EventDetails extends LitElement {
       ${[...groups.entries()].map(
         ([month, month_events]) => html`
           <h3 class="month-header">${month}</h3>
-          <div class="event-group">${month_events.map((event) => html`<event-item .event=${event}></event-item>`)}</div>
+          <ul class="event-group">${month_events.map((event) => html`<li><event-item .event=${event}></event-item></li>`)}</ul>
         `
       )}
       ${this.hasMore ? html`<button class="more" @click=${this.showMore.bind(this)}>More...</button>` : ''}
@@ -93,19 +93,12 @@ export class EventDetails extends LitElement {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
-    .event-card {
-      display: flex;
-      align-items: baseline;
-      gap: 0.75rem;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.3rem 0;
-      text-align: left;
-      font: inherit;
-      color: inherit;
-      width: 100%;
+    .event-group li {
+      display: contents;
     }
     .more {
       margin-top: 1rem;

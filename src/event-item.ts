@@ -1,5 +1,5 @@
 import { css, html, LitElement, type TemplateResult } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, property } from 'lit/decorators.js'
 
 import { formatDayShort, formatEventDate, formatTime } from './core/event-utils'
 import { type CalendarEvent } from './EventStore'
@@ -7,18 +7,15 @@ import { type CalendarEvent } from './EventStore'
 @customElement('event-item')
 export class EventItem extends LitElement {
   @property({ attribute: false }) event!: CalendarEvent
-  @state() private is_open = false
-
-  private toggle() {
-    this.is_open = !this.is_open
-  }
-
   private renderDescription(description: string): TemplateResult {
     const title = this.event.descriptionTitle
+    const el = document.createElement('div')
+    el.innerHTML = description.trim()
+    const plain = el.textContent ?? ''
     if (title !== null) {
-      return html`<a href="${description.trim()}" target="_blank" rel="noopener">Details at ${title}</a>`
+      return html`Details at <a href="${description.trim()}" target="_blank" rel="noopener">${title}</a>`
     }
-    return html`${description.trim()}`
+    return html`${plain}`
   }
 
   private renderDetails(): TemplateResult {
@@ -32,24 +29,26 @@ export class EventItem extends LitElement {
       : null
 
     return html`
-      <button class="event-details" @click=${this.toggle.bind(this)}>
-        <span class="date">${time_str}</span>
-        <span class="detail-body">
-          ${location ? html`<span class="detail-location">${location}</span>` : ''}
-          ${e.description ? html`<span class="detail-desc">${this.renderDescription(e.description)}</span>` : ''}
-        </span>
-      </button>
+      <div class="event-details">
+        <time class="date" datetime="${is_multi_day ? e.startDate.slice(0, 10) : e.startDate}">${time_str}</time>
+        <div class="detail-body">
+          ${location ? html`<address class="detail-location">${location}</address>` : ''}
+          ${e.description ? html`<p class="detail-desc">${this.renderDescription(e.description)}</p>` : ''}
+        </div>
+      </div>
     `
   }
 
   render(): TemplateResult {
     const e = this.event
     return html`
-      <button class="event-card" @click=${this.toggle.bind(this)} aria-expanded=${this.is_open}>
-        <span class="date">${formatDayShort(e.startDate)}</span>
-        <span class="summary">${e.summary}</span>
-      </button>
-      ${this.is_open ? this.renderDetails() : ''}
+      <details>
+        <summary class="event-card">
+          <time class="date" datetime="${e.startDate.slice(0, 10)}">${formatDayShort(e.startDate)}</time>
+          <span class="summary">${e.summary}</span>
+        </summary>
+        ${this.renderDetails()}
+      </details>
     `
   }
 
@@ -57,22 +56,27 @@ export class EventItem extends LitElement {
     :host {
       display: contents;
     }
-    .event-card {
+    details {
+      width: 100%;
+    }
+    summary.event-card {
       display: flex;
       align-items: baseline;
       gap: 0.75rem;
-      background: none;
-      border: none;
-      cursor: pointer;
       padding: 0.3rem 0;
-      text-align: left;
+      cursor: pointer;
       font: inherit;
       color: inherit;
+      list-style: none;
       width: 100%;
     }
-    .event-card:hover .summary,
-    .event-card[aria-expanded='true'] .summary {
-      text-decoration: underline;
+    summary.event-card::-webkit-details-marker {
+      display: none;
+    }
+    details > summary.event-card:hover,
+    details[open] > summary.event-card,
+    .event-details {
+      background-color: #303030;
     }
     .date {
       flex-shrink: 0;
@@ -87,11 +91,7 @@ export class EventItem extends LitElement {
       display: flex;
       align-items: flex-start;
       gap: 0.75rem;
-      background: none;
-      border: none;
-      cursor: pointer;
       padding: 0.2rem 0 0.4rem;
-      text-align: left;
       font: inherit;
       color: inherit;
       width: 100%;
@@ -105,6 +105,13 @@ export class EventItem extends LitElement {
       gap: 0.25rem;
       font-size: 0.9rem;
       color: #555;
+      min-width: 0;
+      overflow-x: auto;
+    }
+    .detail-location,
+    .detail-desc {
+      margin: 0;
+      font-style: normal;
     }
     .detail-location a,
     .detail-desc a {

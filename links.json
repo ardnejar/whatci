@@ -1,18 +1,19 @@
 {
-  "carmen": {
-    "label": "Events and Introspection by Carmen Serber",
-    "url": "https://www.carmenserber.com/",
-    "redirect": true,
-    "webpage": true
-  },
   "facebook": {
     "label": "Facebook, Bellingham Contact Improvisation",
     "url": "https://www.facebook.com/bellinghamcontact",
     "redirect": true,
     "webpage": true
   },
+  "carmen": {
+    "label": "Carmen Serber's Events and Introspection",
+    "url": "https://www.carmenserber.com/",
+    "redirect": true,
+    "webpage": true
+  },
   "newsletter": {
-    "label": "Subscribe to the Email Newsletter to get news and updates",
+    "label": "Email Newsletter Subscribe",
+    "description": "Subscribe to the What Ci email newsletter for events and other news.",
     "url": "https://www.carmenserber.com/#/portal/newsletters",
     "redirect": true,
     "webpage": true
@@ -26,16 +27,16 @@
     "webpage": true
   },
   "calendar-subscribe": {
-    "label": "Subscribe with Google Calendar",
+    "label": "Google Calendar Subscribe (with Google Account)",
     "url": "https://calendar.google.com/calendar/u/0?cid=N3U5MDQzZnI5aXIxcjRkZ3RxbTAzamNpdnNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ",
-    "description": "Subscribe directly with Google Calendar (requires login).",
+    "description": "Subscribe with your Google Account (requires login).",
     "redirect": true,
     "webpage": true
   },
   "ical": {
-    "label": "Subscribe to Calendar without Google Account",
+    "label": "Calendar Subscribe (without Google)",
     "url": "https://calendar.google.com/calendar/ical/7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com/public/basic.ics",
-    "description": "Copy and paste the URL into your calendar app as a new subscription. Or download the link for a one time snapshot of events.",
+    "description": "Copy and paste the link into your calendar app as a new subscription. Or download the ics file for a one time snapshot of events.",
     "redirect": true,
     "webpage": true
   },

@@ -3,31 +3,31 @@
 **/
 
 export class parseDateArgs {
-  readonly #from: Date | undefined
-  readonly #to: Date | undefined
+  private readonly from_date: Date | undefined
+  private readonly to_date: Date | undefined
 
   constructor() {
-    this.#from = this.#parse('from')
-    this.#to = this.#parse('to')
+    this.from_date = this.parse('from')
+    this.to_date = this.parse('to')
 
-    if (this.#from && this.#to && this.#to < this.#from) {
+    if (this.from_date && this.to_date && this.to_date < this.from_date) {
       console.error('--to must be after --from')
       process.exit(1)
     }
 
     // Set to end of day so the date is inclusive
-    if (this.#to) this.#to.setHours(23, 59, 59, 999)
+    if (this.to_date) this.to_date.setHours(23, 59, 59, 999)
   }
 
   from(): Date | undefined {
-    return this.#from
+    return this.from_date
   }
 
   to(): Date | undefined {
-    return this.#to
+    return this.to_date
   }
 
-  #parse(name: string): Date | undefined {
+  private parse(name: string): Date | undefined {
     const idx = process.argv.indexOf(`--${name}`)
     const value = idx !== -1 ? process.argv[idx + 1] : undefined
     if (!value) return undefined

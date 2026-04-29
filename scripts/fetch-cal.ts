@@ -54,5 +54,5 @@ const size_str =
   size_bytes >= 1024 * 1024 ? `${(size_bytes / (1024 * 1024)).toFixed(2)} MB` : `${(size_bytes / 1024).toFixed(1)} KB`
 const event_count = Array.isArray(data.items) ? data.items.length : 0
 
-console.log(`Saved to ${out_file}`)
-console.log(`Events: ${event_count} | Download: ${size_str} | Request: ${fetch_ms}ms | Write: ${write_ms}ms\n`)
+console.log(`Events: ${event_count} | Request: ${fetch_ms}ms | Download: ${size_str} | Write: ${write_ms}ms`)
+console.log(`Saved to ${out_file}\n`)

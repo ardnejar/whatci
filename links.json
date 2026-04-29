@@ -12,7 +12,7 @@
     "webpage": true
   },
   "newsletter": {
-    "label": "Subscribe to the Email Newsletter to get the latest updates",
+    "label": "Subscribe to the Email Newsletter to get news and updates",
     "url": "https://www.carmenserber.com/#/portal/newsletters",
     "redirect": true,
     "webpage": true
@@ -26,7 +26,7 @@
     "webpage": true
   },
   "calendar-subscribe": {
-    "label": "Google Calendar Subscribe",
+    "label": "Subscribe with Google Calendar",
     "url": "https://calendar.google.com/calendar/u/0?cid=N3U5MDQzZnI5aXIxcjRkZ3RxbTAzamNpdnNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ",
     "description": "Subscribe directly with Google Calendar (requires login).",
     "redirect": true,
@@ -35,7 +35,7 @@
   "ical": {
     "label": "Subscribe to Calendar without Google Account",
     "url": "https://calendar.google.com/calendar/ical/7u9043fr9ir1r4dgtqm03jcivs%40group.calendar.google.com/public/basic.ics",
-    "description": "Subscribe with any app or device that supports iCal.",
+    "description": "Copy and paste the URL into your calendar app as a new subscription. Or download the link for a one time snapshot of events.",
     "redirect": true,
     "webpage": true
   },

@@ -5,6 +5,7 @@
 export interface CalendarEvent {
   summary: string
   description: string | null
+  descriptionTitle: string | null
   startDate: string
   endDate: string
   isRecurring: boolean

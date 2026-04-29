@@ -5,7 +5,7 @@ import { CalendarFetchApi } from './calendar-fetch-api'
 import { type CalendarEvent } from './EventStore'
 import './event-item'
 
-@customElement('event-details')
+@customElement('event-list')
 export class EventDetails extends LitElement {
   @state() private events: CalendarEvent[] = []
   @state() private months_shown = 1
@@ -74,7 +74,16 @@ export class EventDetails extends LitElement {
         ([month, month_events]) => html`
           <h3 class="month-header">${month}</h3>
           <ul class="event-group">
-            ${month_events.map((event) => html`<li><event-item .event=${event}></event-item></li>`)}
+            ${(() => {
+              const day_counts = new Map<string, number>()
+              return month_events.map((event) => {
+                const is_multi_day = event.startDate.slice(0, 10) !== event.endDate.slice(0, 10)
+                const day_key = `${event.startDate.slice(0, 10)}:${is_multi_day}`
+                const order = (day_counts.get(day_key) ?? 0) + 1
+                day_counts.set(day_key, order)
+                return html`<li><event-item .event=${event} day-order="${order}"></event-item></li>`
+              })
+            })()}
           </ul>
         `
       )}

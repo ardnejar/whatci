@@ -7,6 +7,7 @@ import { type CalendarEvent } from './EventStore'
 @customElement('event-item')
 export class EventItem extends LitElement {
   @property({ attribute: false }) event!: CalendarEvent
+  @property({ type: Number, attribute: 'day-order' }) dayOrder = 1
 
   private renderDescription(description: string): TemplateResult {
     const title = this.event.descriptionTitle
@@ -67,7 +68,7 @@ export class EventItem extends LitElement {
     return html`
       <details>
         <summary class="event-card">
-          <time class="date" datetime="${e.startDate}">${date_display}</time>
+          <time class="date" day-order="${this.dayOrder}" datetime="${e.startDate}">${date_display}</time>
           <span class="summary">${e.summary}</span>
         </summary>
         ${this.renderDetails()}
@@ -106,6 +107,9 @@ export class EventItem extends LitElement {
       width: 5rem;
       font-size: 0.9rem;
       color: var(--datetime-light-color);
+    }
+    summary .date:not([day-order='1']) {
+      visibility: hidden;
     }
     .nowrap {
       white-space: nowrap;

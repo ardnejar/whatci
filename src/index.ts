@@ -1,1 +1,1 @@
-import './event-details'
+import './event-list'

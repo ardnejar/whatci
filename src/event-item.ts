@@ -1,12 +1,13 @@
 import { css, html, LitElement, type TemplateResult } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
-import { formatDayShort, formatEventDate, formatTime } from './core/event-utils'
+import { formatDayRangeShort, formatDayShort, formatTimePair } from './core/event-utils'
 import { type CalendarEvent } from './EventStore'
 
 @customElement('event-item')
 export class EventItem extends LitElement {
   @property({ attribute: false }) event!: CalendarEvent
+
   private renderDescription(description: string): TemplateResult {
     const title = this.event.descriptionTitle
     const el = document.createElement('div')
@@ -21,16 +22,27 @@ export class EventItem extends LitElement {
   private renderDetails(): TemplateResult {
     const e = this.event
     const is_multi_day = e.startDate.slice(0, 10) !== e.endDate.slice(0, 10)
-    const time_str = is_multi_day ? `${formatEventDate(e)}` : `${formatTime(e.startDate)}–${formatTime(e.endDate)}`
+    const is_all_day = !e.startDate.includes('T')
     const location = e.location
       ? e.location.startsWith('http')
         ? html`<a href="${e.location}" target="_blank" rel="noopener">Online Event</a>`
         : html`<span>${e.location}</span>`
       : null
 
+    let time_display
+    if (is_multi_day) {
+      if (!is_all_day) {
+        const [start_text, end_text] = formatTimePair(e.startDate, e.endDate)
+        time_display = html`<time datetime="${e.startDate}">${start_text}</time>–<time datetime="${e.endDate}">${end_text}</time>`
+      }
+    } else if (!is_all_day) {
+      const [start_text, end_text] = formatTimePair(e.startDate, e.endDate)
+      time_display = html`<time datetime="${e.startDate}">${start_text}</time>–<time datetime="${e.endDate}">${end_text}</time>`
+    }
+
     return html`
       <div class="event-details">
-        <time class="date" datetime="${is_multi_day ? e.startDate.slice(0, 10) : e.startDate}">${time_str}</time>
+        <span class="date">${time_display}</span>
         <div class="detail-body">
           ${location ? html`<address class="detail-location">${location}</address>` : ''}
           ${e.description ? html`<p class="detail-desc">${this.renderDescription(e.description)}</p>` : ''}
@@ -41,10 +53,21 @@ export class EventItem extends LitElement {
 
   render(): TemplateResult {
     const e = this.event
+    const is_multi_day = e.startDate.slice(0, 10) !== e.endDate.slice(0, 10)
+    let date_display
+    if (is_multi_day) {
+      const label = formatDayRangeShort(e.startDate, e.endDate)
+      const sep = label.indexOf(', ')
+      const day_part = label.slice(0, sep + 1)
+      const week_part = label.slice(sep + 2)
+      date_display = html`<span class="nowrap">${day_part}</span> <span class="nowrap">${week_part}</span>`
+    } else {
+      date_display = formatDayShort(e.startDate)
+    }
     return html`
       <details>
         <summary class="event-card">
-          <time class="date" datetime="${e.startDate.slice(0, 10)}">${formatDayShort(e.startDate)}</time>
+          <time class="date" datetime="${e.startDate}">${date_display}</time>
           <span class="summary">${e.summary}</span>
         </summary>
         ${this.renderDetails()}
@@ -76,13 +99,16 @@ export class EventItem extends LitElement {
     details > summary.event-card:hover,
     details[open] > summary.event-card,
     .event-details {
-      background-color: #303030;
+      background-color: hsl(0 0% 97% / 1);
     }
     .date {
       flex-shrink: 0;
-      width: 4.5rem;
+      width: 5rem;
       font-size: 0.9rem;
-      color: #555;
+      color: var(--datetime-light-color);
+    }
+    .nowrap {
+      white-space: nowrap;
     }
     .summary {
       font-size: 1rem;
@@ -97,14 +123,14 @@ export class EventItem extends LitElement {
       width: 100%;
     }
     .event-details .date {
-      color: #555;
+      color: var(--datetime-light-color);
     }
     .detail-body {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
       font-size: 0.9rem;
-      color: #555;
+      color: var(--datetime-light-color);
       min-width: 0;
       overflow-x: auto;
     }
@@ -122,8 +148,14 @@ export class EventItem extends LitElement {
       line-height: 1.5;
     }
     @media (prefers-color-scheme: dark) {
+      details > summary.event-card:hover,
+      details[open] > summary.event-card,
+      .event-details {
+        background-color: #161616;
+      }
+      time,
       .date {
-        color: #aaa;
+        color: var(--datetime-dark-color);
       }
       .event-details .date {
         color: #aaa;

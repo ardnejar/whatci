@@ -49,8 +49,12 @@ export class EventDetails extends LitElement {
 
   private groupByMonth(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
     const groups = new Map<string, CalendarEvent[]>()
+    const current_year = new Date().getFullYear()
     for (const event of events) {
-      const key = new Date(event.startDate).toLocaleString('en-US', { month: 'long', year: 'numeric' })
+      const date = new Date(event.startDate)
+      const options: Intl.DateTimeFormatOptions =
+        date.getFullYear() === current_year ? { month: 'long' } : { month: 'long', year: 'numeric' }
+      const key = date.toLocaleString('en-US', options)
       if (!groups.has(key)) groups.set(key, [])
       groups.get(key)!.push(event)
     }
@@ -59,6 +63,7 @@ export class EventDetails extends LitElement {
 
   render() {
     if (this.api.eventCount === null) return html`<p class="empty">Loading…</p>`
+
     const visible = this.visibleEvents
     if (visible.length === 0) return html`<p class="empty">No upcoming events found.</p>`
 
@@ -68,7 +73,9 @@ export class EventDetails extends LitElement {
       ${[...groups.entries()].map(
         ([month, month_events]) => html`
           <h3 class="month-header">${month}</h3>
-          <ul class="event-group">${month_events.map((event) => html`<li><event-item .event=${event}></event-item></li>`)}</ul>
+          <ul class="event-group">
+            ${month_events.map((event) => html`<li><event-item .event=${event}></event-item></li>`)}
+          </ul>
         `
       )}
       ${this.hasMore ? html`<button class="more" @click=${this.showMore.bind(this)}>More...</button>` : ''}
@@ -87,7 +94,7 @@ export class EventDetails extends LitElement {
       font-size: 1rem;
       font-weight: 600;
       margin: 1.25rem 0 0.4rem;
-      color: inherit;
+      color: var(--datetime-light-color);
     }
     .event-group {
       display: flex;
@@ -115,6 +122,9 @@ export class EventDetails extends LitElement {
     @media (prefers-color-scheme: dark) {
       .more {
         color: #6ea8ff;
+      }
+      .month-header {
+        color: var(--datetime-dark-color);
       }
     }
   `

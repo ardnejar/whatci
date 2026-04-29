@@ -27,7 +27,7 @@ Edit [`links.json`](links.json) to add or change links:
     "slug": {
         "label": "Human-readable name",
         "url": "https://destination-url",
-        "note": "Additional note to display on home page (optional)",
+        "description": "Additional info to display on home page (optional)",
         "redirect": true,  // include in Cloudflare _redirects
         "webpage": true    // show on the index page
     }

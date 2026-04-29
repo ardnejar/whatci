@@ -135,13 +135,31 @@ export function formatTimeRange(event: CalendarEvent): string {
 }
 
 /**
-  Format date as "28 Mon" (day number + weekday short)
+  Format a multi-day range as "8-10, Fri-Sun" or "Apr 30-May 2, Thu-Sat"
+**/
+export function formatDayRangeShort(start_string: string, end_string: string): string {
+  const start = new Date(start_string)
+  const end = new Date(end_string)
+  const start_day = start.getDate()
+  const end_day = end.getDate()
+  const start_weekday = start.toLocaleString('en-US', { weekday: 'short' })
+  const end_weekday = end.toLocaleString('en-US', { weekday: 'short' })
+  if (start.getMonth() !== end.getMonth()) {
+    const start_month = start.toLocaleString('en-US', { month: 'short' })
+    const end_month = end.toLocaleString('en-US', { month: 'short' })
+    return `${start_month} ${start_day}-${end_month} ${end_day}, ${start_weekday}-${end_weekday}`
+  }
+  return `${start_day}-${end_day}, ${start_weekday}-${end_weekday}`
+}
+
+/**
+  Format date as "28, Mon" (day number + weekday short)
 **/
 export function formatDayShort(date_string: string): string {
   const date = new Date(date_string)
   const weekday = date.toLocaleString('en-US', { weekday: 'short' })
   const day = date.getDate()
-  return `${weekday} ${day}`
+  return `${day}, ${weekday}`
 }
 
 /**
@@ -162,4 +180,26 @@ export function stripNewlines(text: string | null | undefined): string {
   if (!text) return ''
   // Replace any sequence of CR/LF/newline with a single space and trim
   return text.replace(/\r?\n+/g, ' ').trim()
+}
+
+/**
+  Returns a pair of formatted time strings for a start/end range.
+  If start and end share the same am/pm period, the suffix is omitted from
+  the start time so the pair renders as e.g. "1–4pm" instead of "1pm–4pm".
+**/
+export function formatTimePair(start_date: string, end_date: string): [string, string] {
+  const start = new Date(start_date)
+  const end = new Date(end_date)
+  const start_ampm = start.getHours() >= 12 ? 'pm' : 'am'
+  const end_ampm = end.getHours() >= 12 ? 'pm' : 'am'
+  const same_period = start_ampm === end_ampm
+
+  const fmt = (d: Date): string => {
+    let h = d.getHours() % 12
+    if (h === 0) h = 12
+    const m = d.getMinutes()
+    return m === 0 ? `${h}` : `${h}:${m.toString().padStart(2, '0')}`
+  }
+
+  return [same_period ? fmt(start) : `${fmt(start)}${start_ampm}`, `${fmt(end)}${end_ampm}`]
 }

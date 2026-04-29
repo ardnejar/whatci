@@ -9,6 +9,11 @@
     <meta property="og:url" content="https://whatci.org/" />
 
     <style>
+      :root {
+        /* --datetime-dark-color: #fff888; */
+        --datetime-dark-color: hsl(56 100% 90% / 1);
+        --datetime-light-color: #555;
+      }
       *,
       *::before,
       *::after {
@@ -27,6 +32,10 @@
       main {
         width: 100%;
         max-width: 720px;
+      }
+      section {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
       }
       h1 {
         font-size: 1.5rem;
@@ -49,6 +58,7 @@
       .links {
         display: flex;
         flex-direction: column;
+        margin-top: 4rem;
       }
       link-item + link-item {
         border-top: 1px solid #e0e0e0;
@@ -69,13 +79,17 @@
   </head>
   <body>
     <main>
-      %VITE_MESSAGE%
+      <article>
+        %VITE_MESSAGE%
+        <section class="events">
+          <event-details></event-details>
+        </section>
 
-      <h2>Jams and Classes</h2>
-      <event-details></event-details>
-
-      <h2></h2>
-      <div id="links" class="links"></div>
+        <section class="links">
+          <h2>Resources and Subscription Links</h2>
+          <div id="links"></div>
+        </section>
+      </article>
     </main>
 
     <script type="module" src="/src/main.ts"></script>

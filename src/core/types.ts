@@ -2,10 +2,16 @@
   Shared types for calendar events across all platforms
 **/
 
+export interface DescriptionLink {
+  url: string
+  title: string
+}
+
 export interface CalendarEvent {
   summary: string
+  descriptionRaw: string | null
   description: string | null
-  descriptionTitle: string | null
+  descriptionLinks: DescriptionLink[] | null
   startDate: string
   endDate: string
   isRecurring: boolean

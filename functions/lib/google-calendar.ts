@@ -57,17 +57,20 @@ export interface ProcessedDescription {
   links: { url: string; title: string }[]
 }
 
-export async function processDescription(raw: string): Promise<ProcessedDescription> {
+export async function processDescription(raw: string, title_cache?: Map<string, string>): Promise<ProcessedDescription> {
+  const { plain, urls } = await parseRaw(raw)
+  return buildFromCache(plain, urls, title_cache)
+}
+
+async function parseRaw(raw: string): Promise<{ plain: string; urls: string[] }> {
   const url_re = /https?:\/\/\S+/g
 
-  // Short-circuit for plain text — HTMLRewriter is not needed and not available in tests
   if (!/<[a-z/!]/i.test(raw)) {
     const plain = raw.trim()
     const urls = [...new Set([...plain.matchAll(url_re)].map((m) => m[0].replace(/[.,;:!?)]+$/, '')))]
-    return fetchLinks(plain, urls)
+    return { plain, urls }
   }
 
-  // HTML path — strip tags, collect newlines from <br>, extract hrefs from <a>
   const href_urls: string[] = []
   const chunks: string[] = []
   const rewritten = new HTMLRewriter()
@@ -97,13 +100,22 @@ export async function processDescription(raw: string): Promise<ProcessedDescript
     .replace(/\n /g, '\n')
     .trim()
   const text_urls = [...plain.matchAll(url_re)].map((m) => m[0].replace(/[.,;:!?)]+$/, ''))
-  const all_urls = [...new Set([...href_urls, ...text_urls])]
-  return fetchLinks(plain, all_urls)
+  const urls = [...new Set([...href_urls, ...text_urls])]
+  return { plain, urls }
 }
 
-async function fetchLinks(plain: string, urls: string[]): Promise<ProcessedDescription> {
+async function buildFromCache(
+  plain: string,
+  urls: string[],
+  title_cache?: Map<string, string>,
+): Promise<ProcessedDescription> {
   if (urls.length === 0) return { text: plain, links: [] }
-  const links = await Promise.all(urls.map(async (url) => ({ url, title: (await fetchPageTitle(url)) ?? 'Website' })))
+  const links = await Promise.all(
+    urls.map(async (url) => ({
+      url,
+      title: title_cache?.get(url) ?? (await fetchPageTitle(url)) ?? 'Website',
+    })),
+  )
   return { text: plain, links }
 }
 
@@ -156,14 +168,30 @@ async function fetchPageTitle(url: string): Promise<string | null> {
 export async function refreshKv(env: Env): Promise<void> {
   const events = await fetchGoogleCalendarEvents(env)
 
+  // Parse all descriptions first to collect every URL across all events
+  const parsed = await Promise.all(
+    events.map((event) => (event.descriptionRaw ? parseRaw(event.descriptionRaw) : null)),
+  )
+
+  // Fetch each unique URL exactly once
+  const all_urls = [...new Set(parsed.flatMap((p) => p?.urls ?? []))]
+  const title_cache = new Map<string, string>()
+  await Promise.all(
+    all_urls.map(async (url) => {
+      title_cache.set(url, (await fetchPageTitle(url)) ?? 'Website')
+    }),
+  )
+
+  // Assemble results from the shared cache — no further network requests
   await Promise.allSettled(
-    events.map(async (event) => {
-      if (event.descriptionRaw) {
-        const { text, links } = await processDescription(event.descriptionRaw)
+    events.map(async (event, i) => {
+      const p = parsed[i]
+      if (p) {
+        const { text, links } = await buildFromCache(p.plain, p.urls, title_cache)
         event.description = text
         event.descriptionLinks = links.length > 0 ? links : null
       }
-    })
+    }),
   )
 
   await env.CALENDAR_KV.put(KV_KEY, JSON.stringify(events), {

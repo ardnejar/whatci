@@ -71,18 +71,31 @@ export async function processDescription(raw: string): Promise<ProcessedDescript
   const href_urls: string[] = []
   const chunks: string[] = []
   const rewritten = new HTMLRewriter()
-    .on('br', { element() { chunks.push('\n') } })
+    .on('br', {
+      element() {
+        chunks.push('\n')
+      },
+    })
     .on('a[href]', {
       element(el) {
         const href = el.getAttribute('href')
         if (href && /^https?:\/\//.test(href)) href_urls.push(href)
       },
     })
-    .on('*', { text(chunk) { chunks.push(chunk.text) } })
+    .on('*', {
+      text(chunk) {
+        chunks.push(chunk.text)
+      },
+    })
     .transform(new Response(raw))
   await rewritten.text()
 
-  const plain = chunks.join('').trim()
+  const plain = chunks
+    .join('')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/ \n/g, '\n')
+    .replace(/\n /g, '\n')
+    .trim()
   const text_urls = [...plain.matchAll(url_re)].map((m) => m[0].replace(/[.,;:!?)]+$/, ''))
   const all_urls = [...new Set([...href_urls, ...text_urls])]
   return fetchLinks(plain, all_urls)
@@ -90,10 +103,20 @@ export async function processDescription(raw: string): Promise<ProcessedDescript
 
 async function fetchLinks(plain: string, urls: string[]): Promise<ProcessedDescription> {
   if (urls.length === 0) return { text: plain, links: [] }
-  const links = await Promise.all(
-    urls.map(async (url) => ({ url, title: (await fetchPageTitle(url)) ?? 'Website' })),
-  )
+  const links = await Promise.all(urls.map(async (url) => ({ url, title: (await fetchPageTitle(url)) ?? 'Website' })))
   return { text: plain, links }
+}
+
+function decodeHtmlEntities(text: string): string {
+  return text
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCharCode(Number(code)))
+    .replace(/&[a-z]+;/gi, '')
 }
 
 async function fetchPageTitle(url: string): Promise<string | null> {
@@ -119,7 +142,8 @@ async function fetchPageTitle(url: string): Promise<string | null> {
     reader.cancel()
 
     const match = chunk.match(/<title[^>]*>([^<]*)<\/title>/i)
-    return match ? match[1].trim() : null
+    if (!match) return null
+    return decodeHtmlEntities(match[1].replace(/<[^>]+>/g, '')).trim() || null
   } catch {
     clearTimeout(timer)
     return null
@@ -139,7 +163,7 @@ export async function refreshKv(env: Env): Promise<void> {
         event.description = text
         event.descriptionLinks = links.length > 0 ? links : null
       }
-    }),
+    })
   )
 
   await env.CALENDAR_KV.put(KV_KEY, JSON.stringify(events), {

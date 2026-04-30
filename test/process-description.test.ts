@@ -7,7 +7,7 @@ import { processDescription } from '../functions/lib/google-calendar.ts'
   for the subset of features used by processDescription:
     - on('br', { element })       — emits a newline for each <br>
     - on('a[href]', { element })  — exposes href attribute via getAttribute
-    - on('*', { text })           — emits all visible text content
+    - on('*', { text })           — emits all visible text content (horizontal whitespace normalised by processDescription)
   The mock strips tags with regex, which is acceptable in a test context.
 **/
 type ElementHandler = {
@@ -148,7 +148,7 @@ describe('processDescription', () => {
       expect(vi.mocked(fetch)).toHaveBeenCalledTimes(1)
     })
 
-    it('strips HTML tags, decodes entities, and joins <br> as newline', async () => {
+    it('strips HTML tags, decodes entities, converts <br> to newline', async () => {
       const result = await processDescription('<p>Hello &amp; welcome</p><br>Come join us')
       expect(result.text).toBe('Hello & welcome\nCome join us')
       expect(result.links).toEqual([])

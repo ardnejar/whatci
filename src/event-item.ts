@@ -100,13 +100,13 @@ export class EventItem extends LitElement {
     details > summary.event-card:hover,
     details[open] > summary.event-card,
     .event-details {
-      background-color: hsl(0 0% 97% / 1);
+      background-color: #161616;
     }
     .date {
       flex-shrink: 0;
       width: 5rem;
       font-size: 0.9rem;
-      color: var(--datetime-light-color);
+      color: var(--datetime-color);
     }
     summary .date:not([day-order='1']) {
       visibility: hidden;
@@ -116,6 +116,10 @@ export class EventItem extends LitElement {
     }
     .summary {
       font-size: 1rem;
+      /* border-bottom: dotted; */
+      text-decoration: underline;
+      text-decoration-color: hsl(0deg 0% 80%);
+      text-decoration-style: dotted;
     }
     .event-details {
       display: flex;
@@ -127,14 +131,14 @@ export class EventItem extends LitElement {
       width: 100%;
     }
     .event-details .date {
-      color: var(--datetime-light-color);
+      color: var(--datetime-color);
     }
     .detail-body {
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
       font-size: 0.9rem;
-      color: var(--datetime-light-color);
+      color: var(--datetime-color);
       min-width: 0;
       overflow-x: auto;
     }
@@ -145,31 +149,21 @@ export class EventItem extends LitElement {
     }
     .detail-location a,
     .detail-desc a {
-      color: #0057d8;
+      color: var(--link-color);
     }
+
     .detail-desc {
       font-size: 0.9rem;
       line-height: 1.5;
     }
-    @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: light) {
       details > summary.event-card:hover,
       details[open] > summary.event-card,
       .event-details {
-        background-color: #161616;
+        background-color: hsl(0 0% 97% / 1);
       }
-      time,
-      .date {
-        color: var(--datetime-dark-color);
-      }
-      .event-details .date {
-        color: #aaa;
-      }
-      .detail-body {
-        color: #aaa;
-      }
-      .detail-location a,
-      .detail-desc a {
-        color: #6ea8ff;
+      .summary {
+        text-decoration-color: hsl(0deg 0% 10%);
       }
     }
   `

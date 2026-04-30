@@ -12,11 +12,13 @@
     <meta property="og:description" content="Contact Improvisation in and near Whatcom County, Washington" />
     <meta property="og:card" content="summary" />
 
+    <meta name="color-scheme" content="dark light" />
+
     <style>
       :root {
-        /* --datetime-dark-color: #fff888; */
-        --datetime-dark-color: hsl(56 100% 90% / 1);
-        --datetime-light-color: #555;
+        color-scheme: dark light;
+        --datetime-color: hsl(56 100% 90% / 1);
+        --link-color: #6ea8ff;
       }
       *,
       *::before,
@@ -30,8 +32,8 @@
         align-items: center;
         justify-content: center;
         padding: 2rem 1.5rem;
-        background: #ffffff;
-        color: #1a1a1a;
+        background: #000;
+        color: #fff;
       }
       main {
         width: 100%;
@@ -57,7 +59,7 @@
         margin-bottom: 0;
       }
       .message a {
-        color: #0057d8;
+        color: #6ea8ff;
       }
       .links {
         display: flex;
@@ -65,18 +67,22 @@
         margin-top: 4rem;
       }
       link-item + link-item {
-        border-top: 1px solid #e0e0e0;
+        border-top: 1px solid #333;
       }
-      @media (prefers-color-scheme: dark) {
+      @media (prefers-color-scheme: light) {
+        :root {
+          --datetime-color: #555;
+          --link-color: #0057d8;
+        }
         body {
-          background: #000;
-          color: #fff;
+          background: #ffffff;
+          color: #1a1a1a;
         }
         .message a {
-          color: #6ea8ff;
+          color: #0057d8;
         }
         link-item + link-item {
-          border-top-color: #333;
+          border-top-color: #e0e0e0;
         }
       }
     </style>

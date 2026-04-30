@@ -103,7 +103,7 @@ export class EventDetails extends LitElement {
       font-size: 1rem;
       font-weight: 600;
       margin: 1.25rem 0 0.4rem;
-      color: var(--datetime-light-color);
+      color: var(--datetime-color);
     }
     .event-group {
       display: flex;
@@ -122,19 +122,11 @@ export class EventDetails extends LitElement {
       border: none;
       cursor: pointer;
       font: inherit;
-      color: #0057d8;
+      color: var(--link-color);
       padding: 0;
     }
     .more:hover {
       text-decoration: underline;
-    }
-    @media (prefers-color-scheme: dark) {
-      .more {
-        color: #6ea8ff;
-      }
-      .month-header {
-        color: var(--datetime-dark-color);
-      }
     }
   `
 }

@@ -64,10 +64,10 @@ export class EventDetails extends LitElement {
   }
 
   render() {
-    if (this.cal.eventCount === null) return html`<p class="empty">Loading…</p>`
+    if (this.cal.eventCount === null) return html`<h3 class="empty">Loading…</h3>`
 
     const visible = this.visibleEvents
-    if (visible.length === 0) return html`<p class="empty">No upcoming events found.</p>`
+    if (visible.length === 0) return html`<h3 class="empty">No upcoming events found.</h3>`
 
     const groups = this.groupByMonth(visible)
 
@@ -89,13 +89,16 @@ export class EventDetails extends LitElement {
           </ul>
         `
       )}
-      ${this.hasMore ? html`<button class="more" @click=${this.showMore.bind(this)}>More...</button>` : ''}
+      ${this.hasMore ? html`<button class="more" @click=${this.showMore.bind(this)}>more...</button>` : ''}
     `
   }
 
   static styles = css`
     :host {
       display: block;
+    }
+    h3.month-header {
+      font-weight: 1000;
     }
     ul {
       padding: 0;
@@ -120,21 +123,37 @@ export class EventDetails extends LitElement {
       list-style: none;
       padding: 0;
       margin: 0;
+      animation: slide-in-bottom 2s ease both;
     }
     .event-group li {
       display: contents;
     }
     .more {
+      padding: var(--content-padding);
       margin-top: 1rem;
-      background: none;
+      /* background: none; */
       border: none;
       cursor: pointer;
       font: inherit;
-      color: var(--link-color);
-      padding: var(--content-padding);
+      /* color: var(--link-color); */
+      background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: 1000;
     }
     .more:hover {
       text-decoration: underline;
+    }
+    @keyframes slide-in-bottom {
+      from {
+        opacity: 0;
+        transform: translateY(1rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   `
 }

@@ -102,7 +102,7 @@ export class EventItem extends LitElement {
 
     return html`
       <details>
-        <summary class="event-card">
+        <summary class="event-summary">
           <time class="date" day-order="${this.dayOrder}" datetime="${e.startDate}">${date_display}</time>
           <span class="summary">${e.summary}</span>
         </summary>

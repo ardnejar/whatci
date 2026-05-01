@@ -5,7 +5,7 @@ details {
   /* width: 100%; */
   padding: var(--content-padding);
 }
-summary.event-card {
+summary.event-summary {
   /* width: 100%; */
   display: flex;
   align-items: baseline;
@@ -16,7 +16,7 @@ summary.event-card {
   color: inherit;
   list-style: none;
 }
-summary.event-card::-webkit-details-marker {
+summary.event-summary::-webkit-details-marker {
   display: none;
 }
 details:hover,
@@ -43,7 +43,6 @@ summary .date:not([day-order='1']) {
 }
 .summary {
   font-size: 1rem;
-  /* border-bottom: dotted; */
   text-decoration: underline;
   text-decoration-color: hsl(0deg 0% 80%);
   text-decoration-style: dotted;
@@ -83,8 +82,8 @@ address {
   color: var(--highlight-color);
 }
 @media (prefers-color-scheme: light) {
-  details > summary.event-card:hover,
-  details[open] > summary.event-card,
+  details > summary.event-summary:hover,
+  details[open] > summary.event-summary,
   .event-details {
     background-color: hsl(0 0% 97% / 1);
   }

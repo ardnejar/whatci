@@ -22,6 +22,12 @@ export class LinkList extends LitElement {
     link-item + link-item {
       border-top: 1px solid #333;
     }
+    h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 1000;
+      color: var(--highlight-color);
+    }
     @media (prefers-color-scheme: light) {
       link-item + link-item {
         border-top-color: #e0e0e0;
@@ -31,6 +37,8 @@ export class LinkList extends LitElement {
 
   render(): TemplateResult {
     return html`
+      <h2>Resources and Subscription Links</h2>
+
       ${Object.entries(links as Record<string, LinkEntry>)
         .filter(([, entry]) => entry.webpage)
         .map(

@@ -11,7 +11,7 @@ interface LinkEntry {
 const parseJson = (src: string): Record<string, LinkEntry> => JSON.parse(src)
 
 const loadRedirects = (): Map<string, string> => {
-  const links = parseJson(readFileSync('./links.json', 'utf8'))
+  const links = parseJson(readFileSync('./content/links.json', 'utf8'))
   return new Map(
     Object.entries(links)
       .filter(([, v]) => v.redirect)

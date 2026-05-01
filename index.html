@@ -66,9 +66,6 @@
         flex-direction: column;
         margin-top: 4rem;
       }
-      link-item + link-item {
-        border-top: 1px solid #333;
-      }
       @media (prefers-color-scheme: light) {
         :root {
           --datetime-color: #555;
@@ -80,9 +77,6 @@
         }
         .message a {
           color: #0057d8;
-        }
-        link-item + link-item {
-          border-top-color: #e0e0e0;
         }
       }
     </style>
@@ -97,12 +91,11 @@
 
         <section class="links">
           <h2>Resources and Subscription Links</h2>
-          <div id="links"></div>
+          <link-list></link-list>
         </section>
       </article>
     </main>
 
-    <script type="module" src="/src/main.ts"></script>
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>

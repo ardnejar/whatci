@@ -5,6 +5,47 @@ import { customElement, property } from 'lit/decorators.js'
 import { formatDayRangeShort, formatDayShort, formatTimePair } from './core/event-utils'
 import { type CalendarEvent } from './core/types'
 
+const URL_RE = /https?:\/\/\S+/g
+const TRAILING_PUNCT_RE = /[.,;:!?)]+$/
+
+/**
+  Convert plain-text description and its associated links into an HTML string.
+  URLs in the text are replaced with anchor tags using titles from the link map.
+  Links whose URL only appeared in an href (not in the visible text) are appended at the end.
+**/
+function buildDescriptionHtml(description: string, descriptionLinks: CalendarEvent['descriptionLinks']): string {
+  const link_map = new Map((descriptionLinks ?? []).map((l) => [l.url, l.title]))
+  const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  const parts: string[] = []
+  const urls_in_text = new Set<string>()
+  let last = 0
+  let m: RegExpExecArray | null
+  URL_RE.lastIndex = 0
+
+  while ((m = URL_RE.exec(description)) !== null) {
+    const raw = m[0]
+    const url = raw.replace(TRAILING_PUNCT_RE, '')
+    const trailing = raw.slice(url.length)
+    urls_in_text.add(url)
+    parts.push(esc(description.slice(last, m.index)))
+    const title = link_map.get(url)
+    parts.push(title ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(title)}</a>${esc(trailing)}` : esc(raw))
+    last = m.index + raw.length
+  }
+  parts.push(esc(description.slice(last)))
+
+  const extra_links = (descriptionLinks ?? []).filter((l) => !urls_in_text.has(l.url))
+  if (extra_links.length > 0) {
+    const links_html = extra_links
+      .map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a>`)
+      .join(', ')
+    if (parts.join('').trim()) parts.push(`<br>${links_html}`)
+    else parts.push(links_html)
+  }
+
+  return parts.join('').replace(/\n/g, '<br>')
+}
+
 @customElement('event-item')
 export class EventItem extends LitElement {
   @property({ attribute: false }) event!: CalendarEvent
@@ -13,37 +54,7 @@ export class EventItem extends LitElement {
   private renderDescription(): TemplateResult {
     const { description, descriptionLinks } = this.event
     if (!description) return html``
-
-    const link_map = new Map((descriptionLinks ?? []).map((l) => [l.url, l.title]))
-    const url_re = /https?:\/\/\S+/g
-    const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    const parts: string[] = []
-    const urls_in_text = new Set<string>()
-    let last = 0
-    let m: RegExpExecArray | null
-
-    while ((m = url_re.exec(description)) !== null) {
-      const raw = m[0]
-      const url = raw.replace(/[.,;:!?)]+$/, '')
-      const trailing = raw.slice(url.length)
-      urls_in_text.add(url)
-      parts.push(esc(description.slice(last, m.index)))
-      const title = link_map.get(url)
-      parts.push(title ? `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(title)}</a>${esc(trailing)}` : esc(raw))
-      last = m.index + raw.length
-    }
-    parts.push(esc(description.slice(last)))
-
-    // Append links whose URL was only in an href attribute, not visible in the plain text
-    const extra_links = (descriptionLinks ?? []).filter((l) => !urls_in_text.has(l.url))
-    if (extra_links.length > 0) {
-      const links_html = extra_links
-        .map((l) => `<a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.title)}</a>`)
-        .join(', ')
-      if (parts.join('').trim()) parts.push(`<br>${links_html}`)
-      else parts.push(links_html)
-    }
-    return html`${unsafeHTML(parts.join('').replace(/\n/g, '<br>'))}`
+    return html`${unsafeHTML(buildDescriptionHtml(description, descriptionLinks))}`
   }
 
   private renderDetails(): TemplateResult {

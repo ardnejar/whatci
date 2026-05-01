@@ -61,12 +61,13 @@ export async function processDescription(raw: string, title_cache?: Map<string, 
   return buildFromCache(plain, urls, title_cache)
 }
 
-async function parseRaw(raw: string): Promise<{ plain: string; urls: string[] }> {
-  const url_re = /https?:\/\/\S+/g
+const URL_RE = /https?:\/\/\S+/g
+const TRAILING_PUNCT_RE = /[.,;:!?)]+$/
 
+async function parseRaw(raw: string): Promise<{ plain: string; urls: string[] }> {
   if (!/<[a-z/!]/i.test(raw)) {
     const plain = raw.trim()
-    const urls = [...new Set([...plain.matchAll(url_re)].map((m) => m[0].replace(/[.,;:!?)]+$/, '')))]
+    const urls = [...new Set([...plain.matchAll(URL_RE)].map((m) => m[0].replace(TRAILING_PUNCT_RE, '')))]
     return { plain, urls }
   }
 
@@ -98,7 +99,7 @@ async function parseRaw(raw: string): Promise<{ plain: string; urls: string[] }>
     .replace(/ \n/g, '\n')
     .replace(/\n /g, '\n')
     .trim()
-  const text_urls = [...plain.matchAll(url_re)].map((m) => m[0].replace(/[.,;:!?)]+$/, ''))
+  const text_urls = [...plain.matchAll(URL_RE)].map((m) => m[0].replace(TRAILING_PUNCT_RE, ''))
   const urls = [...new Set([...href_urls, ...text_urls])]
   return { plain, urls }
 }

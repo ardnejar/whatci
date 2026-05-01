@@ -1,8 +1,8 @@
-# What CI — Landing Page and URL Shortener
+# What CI — Page and URL Shortener
 
 https://whatci.org/
 
-A Cloudflare Pages site and URL shortener.
+A Cloudflare Pages site and URL shortener that displays a list of events from the What CI Google Calendar.
 
 ## Calendar Integration
 
@@ -16,11 +16,13 @@ https://whatci.org/admin/refresh?token=ADMIN_TOKEN
 
 The cache is also refreshed automatically when stale (older than 1 hour) after the next calendar request.
 
-## Usage
+## Content and Shortlink Editing
 
-Edit [`message.md`](message.md) to change the text shown above the links on the index page. Supports full Markdown.
+Edit [`content/message.md`](content/message.md) to change the text shown above the links on the index page. Supports full Markdown.
 
-Edit [`links.json`](links.json) to add or change links:
+Any `*.md` file added to the [`content/`](content/) folder is automatically injected into `index.html` at build time. The placeholder is derived from the filename — `content/footer.md` maps to `%VITE_FOOTER%`. Add the placeholder to the HTML where you want the content to appear.
+
+Edit [`content/links.json`](content/links.json) to add or change links:
 
 ```jsonc
 {
@@ -33,9 +35,13 @@ Edit [`links.json`](links.json) to add or change links:
     }
 }
 ```
+
+At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage.
+
+
 ## Development
 
-Run both Vite and Wrangler in separate terminals to develop locally. Vite give you hot module replacement. Wrangler fetches and hosts calendar events:
+Run both Vite and Wrangler in separate terminals to develop locally. Vite gives you hot module replacement. Wrangler fetches and hosts calendar events:
 
 ```sh
 npm run dev          # Vite dev server
@@ -44,10 +50,6 @@ npm run dev:wrangler  # Wrangler Pages and Functions
 
 > Use URL with the port from `dev:wrangler` to see JSON-LD structured data injected via the Worker.
 
-
-## Build
-
-At build time, `dist/_redirects` is generated from all entries with `"redirect": true`. Entries with `"webpage": true` are rendered as link cards in the webpage.
 
 ## Scripts
 
@@ -82,7 +84,7 @@ Both scripts print a summary: event count, download size, request time, and writ
 | [/calendar-events](/calendar-events) | Calendar events from KV cache as `CalendarEvent[]` JSON. Triggers a blocking fetch on cold start; background refresh when stale. |
 | [/admin/refresh?token=TOKEN](/admin/refresh?token=TOKEN) | Force-refreshes the KV cache from Google Calendar. Requires `ADMIN_TOKEN`. Redirects to homepage on success. |
 | [/json-ld](/json-ld) | The schema.org `ItemList` JSON-LD payload that gets injected into the page — events for the next 6 months, merged. Useful for inspection. |
-| `/<slug>` | Redirects to the destination URL for any slug with `"redirect": true` in `links.json`. |
+| `/<slug>` | Redirects to the destination URL for any slug with `"redirect": true` in `content/links.json`. |
 
 
 # Services

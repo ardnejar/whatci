@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import { message } from './vite-plugins/message.ts'
+import { content } from './vite-plugins/content.ts'
 import { shortlinks } from './vite-plugins/shortlinks.ts'
 
 export default defineConfig({
@@ -18,5 +18,5 @@ export default defineConfig({
       '/calendar-events': 'http://localhost:8788',
     },
   },
-  plugins: [message(), shortlinks()],
+  plugins: [content(), shortlinks()],
 })

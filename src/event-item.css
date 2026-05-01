@@ -2,9 +2,11 @@
   display: contents;
 }
 details {
-  width: 100%;
+  /* width: 100%; */
+  padding: var(--content-padding);
 }
 summary.event-card {
+  /* width: 100%; */
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
@@ -13,14 +15,12 @@ summary.event-card {
   font: inherit;
   color: inherit;
   list-style: none;
-  width: 100%;
 }
 summary.event-card::-webkit-details-marker {
   display: none;
 }
-details > summary.event-card:hover,
-details[open] > summary.event-card,
-.event-details {
+details:hover,
+details[open] {
   background-color: #161616;
 }
 .date {
@@ -31,6 +31,12 @@ details[open] > summary.event-card,
 }
 summary .date:not([day-order='1']) {
   visibility: hidden;
+}
+.time {
+  flex-shrink: 0;
+  width: 5rem;
+  font-size: 0.9rem;
+  color: var(--highlight-color);
 }
 .nowrap {
   white-space: nowrap;
@@ -51,9 +57,6 @@ summary .date:not([day-order='1']) {
   color: inherit;
   width: 100%;
 }
-.event-details .date {
-  color: var(--datetime-color);
-}
 .detail-body {
   display: flex;
   flex-direction: column;
@@ -63,20 +66,21 @@ summary .date:not([day-order='1']) {
   overflow-x: auto;
 }
 .detail-location,
-.detail-desc {
+.detail-description {
   margin: 0;
   font-style: normal;
 }
 .detail-location a,
-.detail-desc a {
+.detail-description a {
   color: var(--link-color);
 }
-.detail-desc {
+.detail-description {
   font-size: 0.9rem;
   line-height: 1.5;
 }
 address {
   font-size: 0.85rem;
+  color: var(--highlight-color);
 }
 @media (prefers-color-scheme: light) {
   details > summary.event-card:hover,

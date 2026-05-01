@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 
-import { CalendarFetchApi } from './calendar-fetch-api'
+import { CalendarStore } from './calendar-fetch-api'
 import { renderEventsSummaryTable, renderEventsSummaryText } from './core/renderer'
 import { type CalendarEvent } from './core/types'
 
@@ -9,13 +9,13 @@ import { type CalendarEvent } from './core/types'
 export class EventCopy extends LitElement {
   @state() private events: CalendarEvent[] = []
 
-  private api = new CalendarFetchApi()
+  private cal = new CalendarStore()
 
   connectedCallback() {
     super.connectedCallback()
     this.loadEvents()
     window.addEventListener('calendar-updated', this.loadEvents.bind(this))
-    this.api.fetch().catch((err) => console.error('Calendar fetch failed:', err))
+    this.cal.fetch().catch((err) => console.error('Calendar fetch failed:', err))
   }
 
   disconnectedCallback() {
@@ -26,7 +26,7 @@ export class EventCopy extends LitElement {
   private loadEvents = () => {
     const now = new Date()
     const end_date = new Date(now.getFullYear(), now.getMonth() + 3, 0)
-    this.events = this.api.get('first-occurrences', now, end_date)
+    this.events = this.cal.get('first-occurrences', now, end_date)
   }
 
   get text_content() {
@@ -34,7 +34,7 @@ export class EventCopy extends LitElement {
   }
 
   render() {
-    if (this.api.eventCount === null) return html`<p class="empty">Loading…</p>`
+    if (this.cal.eventCount === null) return html`<p class="empty">Loading…</p>`
     if (this.events.length === 0) return html`<p class="empty">No upcoming events found.</p>`
     return html`${renderEventsSummaryTable(this.events)}`
   }

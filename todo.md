@@ -1,5 +1,8 @@
 # To do
 
+Content
+- favicon
+
 Configuration
 - Finish configuration of eslint-plugin-simple-import-sort.
 

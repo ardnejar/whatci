@@ -1,7 +1,7 @@
 import type { CalendarEvent, EventFilter } from './core/types.ts'
 import { mergeEvents } from './core/event-utils.ts'
 
-export class CalendarFetchApi {
+export class CalendarStore {
   private _events: CalendarEvent[] = []
   private _fetched = false
 

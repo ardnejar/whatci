@@ -1,7 +1,7 @@
 import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 
-import { CalendarFetchApi } from './calendar-fetch-api'
+import { CalendarStore } from './calendar-fetch-api'
 import { type CalendarEvent } from './core/types'
 import './event-item'
 
@@ -10,13 +10,13 @@ export class EventDetails extends LitElement {
   @state() private events: CalendarEvent[] = []
   @state() private months_shown = 1
 
-  private api = new CalendarFetchApi()
+  private cal = new CalendarStore()
 
   connectedCallback() {
     super.connectedCallback()
     this.loadEvents()
     window.addEventListener('calendar-updated', this.loadEvents.bind(this))
-    this.api.fetch().catch((err) => console.error('Calendar fetch failed:', err))
+    this.cal.fetch().catch((err) => console.error('Calendar fetch failed:', err))
   }
 
   disconnectedCallback() {
@@ -26,17 +26,17 @@ export class EventDetails extends LitElement {
 
   private loadEvents = () => {
     const now = new Date()
-    this.events = this.api.get('merged', now, this.endOfMonthOffset(this.months_shown + 1))
+    this.events = this.cal.get('merged', now, this.endOfMonthOffset(this.months_shown))
   }
 
   private get visibleEvents(): CalendarEvent[] {
-    const end_date = this.endOfMonthOffset(this.months_shown + 1)
+    const end_date = this.endOfMonthOffset(this.months_shown)
     return this.events.filter((e) => new Date(e.startDate) <= end_date)
   }
 
   private get hasMore(): boolean {
     const now = new Date()
-    return this.api.get('merged', now, this.endOfMonthOffset(this.months_shown + 2)).length > this.visibleEvents.length
+    return this.cal.get('merged', now, this.endOfMonthOffset(this.months_shown + 1)).length > this.visibleEvents.length
   }
 
   private endOfMonthOffset(offset: number): Date {
@@ -64,7 +64,7 @@ export class EventDetails extends LitElement {
   }
 
   render() {
-    if (this.api.eventCount === null) return html`<p class="empty">Loading…</p>`
+    if (this.cal.eventCount === null) return html`<p class="empty">Loading…</p>`
 
     const visible = this.visibleEvents
     if (visible.length === 0) return html`<p class="empty">No upcoming events found.</p>`
@@ -97,14 +97,20 @@ export class EventDetails extends LitElement {
     :host {
       display: block;
     }
+    ul {
+      padding: 0;
+      margin: 0;
+    }
     .empty {
       color: #888;
       font-style: italic;
+      padding: var(--content-padding);
     }
     .month-header {
+      margin: 1.25rem 0 0.4rem;
+      padding: var(--content-padding);
       font-size: 1.8rem;
       font-weight: 600;
-      margin: 1.25rem 0 0.4rem;
       color: var(--datetime-color);
     }
     .event-group {
@@ -125,7 +131,7 @@ export class EventDetails extends LitElement {
       cursor: pointer;
       font: inherit;
       color: var(--link-color);
-      padding: 0;
+      padding: var(--content-padding);
     }
     .more:hover {
       text-decoration: underline;

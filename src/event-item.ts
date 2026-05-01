@@ -78,10 +78,10 @@ export class EventItem extends LitElement {
 
     return html`
       <div class="event-details">
-        <span class="date">${time_display}</span>
+        <span class="time">${time_display}</span>
         <div class="detail-body">
           ${location ? html`<address class="detail-location">${location}</address>` : ''}
-          ${e.description ? html`<p class="detail-desc">${this.renderDescription()}</p>` : ''}
+          ${e.description ? html`<p class="detail-description">${this.renderDescription()}</p>` : ''}
         </div>
       </div>
     `

@@ -20,6 +20,7 @@
         --datetime-color: hsl(254deg 100% 81%);
         --link-color: #6ea8ff;
         --highlight-color: #ffbe64;
+        --content-padding: 0 1.2rem;
       }
       *,
       *::before,
@@ -27,17 +28,19 @@
         box-sizing: border-box;
       }
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        width: 100vw;
         min-height: 100dvh;
         display: flex;
-        align-items: center;
+        /* align-items: center; */
         justify-content: center;
-        padding: 2rem 1.5rem;
+        padding: 0;
+        margin: 0;
         background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         color: #fff;
       }
       main {
-        width: 100%;
+        width: 100vw;
         max-width: 720px;
         container-type: inline-size;
       }
@@ -59,13 +62,15 @@
         background-clip: text;
       }
       h2 {
+        margin-bottom: 1rem;
+        padding: var(--content-padding);
         font-size: 1.5rem;
         font-weight: 600;
-        margin-bottom: 1rem;
         color: var(--highlight-color);
       }
       .message {
         margin-bottom: 2rem;
+        padding: var(--content-padding);
         line-height: 1.6;
       }
       .message p {
@@ -77,10 +82,17 @@
       .message a {
         color: #6ea8ff;
       }
+      event-list {
+        min-height: 30vh;
+      }
       .links {
         display: flex;
         flex-direction: column;
         margin-top: 4rem;
+      }
+      link-list {
+        min-height: 30vh;
+        padding: var(--content-padding);
       }
       @media (prefers-color-scheme: light) {
         :root {

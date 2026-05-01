@@ -1,5 +1,5 @@
 # What CI?
 
-Contact Improvisation in and near Whatcom County, Washington.
+Contact Improvisation, Improvisation and Somatic Shenanigans in and near Whatcom County, Washington.
 
 Discover What-CI's happening...

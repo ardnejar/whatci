@@ -2,30 +2,7 @@
   Shared event utilities - isomorphic code that works in browser and Node.js
 **/
 
-import { type CalendarEvent, type LocationFilter } from './types'
-
-/**
-  Filter and merge events by location
-**/
-export function filterAndMergeEvents(events: CalendarEvent[], location: LocationFilter): CalendarEvent[] {
-  const now = new Date()
-  const filtered = events
-    .filter((e) => new Date(e.startDate) > now)
-    .filter((e) => {
-      if (!location) return true
-      if (location === 'Bellingham') {
-        // include events with null location as Bellingham
-        return !e.location || e.location.includes('Bellingham')
-      }
-      if (location === 'Elsewhere') {
-        return !!e.location && !e.location.includes('Bellingham')
-      }
-      return true
-    })
-    .sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
-
-  return mergeEvents(filtered)
-}
+import { type CalendarEvent } from './types'
 
 /**
   Merge consecutive events with the same summary
@@ -33,50 +10,39 @@ export function filterAndMergeEvents(events: CalendarEvent[], location: Location
 export function mergeEvents(events: CalendarEvent[]): CalendarEvent[] {
   if (events.length === 0) return []
 
-  // Group events by normalized summary
-  const groups = new Map<string, CalendarEvent[]>()
-  for (const event of events) {
-    const normalized_summary = event.summary.toLowerCase().replace(/[^a-z0-9]/g, '')
-    if (!groups.has(normalized_summary)) {
-      groups.set(normalized_summary, [])
-    }
-    groups.get(normalized_summary)!.push(event)
-  }
+  const sorted = [...events].sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
 
-  // Merge events within each group
-  const merged: CalendarEvent[] = []
-  for (const group_events of groups.values()) {
-    if (group_events.length === 1) {
-      merged.push(group_events[0])
+  const open = new Map<string, CalendarEvent>()
+  const result: CalendarEvent[] = []
+
+  for (const event of sorted) {
+    const key = event.summary.toLowerCase().replace(/[^a-z0-9]/g, '')
+    const current = open.get(key)
+
+    if (!current) {
+      open.set(key, event)
       continue
     }
 
-    // Sort by start date within group
-    group_events.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+    const hours_diff = (new Date(event.startDate).getTime() - new Date(current.endDate).getTime()) / (1000 * 60 * 60)
 
-    let current = group_events[0]
-    for (let i = 1; i < group_events.length; i++) {
-      const next = group_events[i]
-      const current_end = new Date(current.endDate).getTime()
-      const next_start = new Date(next.startDate).getTime()
-      const hours_diff = (next_start - current_end) / (1000 * 60 * 60)
-
-      if (hours_diff < 48) {
-        // Merge: extend the end date if next event ends later
-        if (new Date(next.endDate).getTime() > current_end) {
-          current = { ...current, endDate: next.endDate }
-        }
-      } else {
-        // Don't merge: add current and start new one
-        merged.push(current)
-        current = next
+    if (hours_diff < 48) {
+      // Merge: extend end date if this event ends later
+      if (new Date(event.endDate).getTime() > new Date(current.endDate).getTime()) {
+        open.set(key, { ...current, endDate: event.endDate })
       }
+    } else {
+      // Gap too large: emit the current span, start a new one
+      result.push(current)
+      open.set(key, event)
     }
-    merged.push(current)
   }
 
-  // Sort all merged events by start date
-  return merged.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
+  for (const event of open.values()) {
+    result.push(event)
+  }
+
+  return result.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime())
 }
 
 /**

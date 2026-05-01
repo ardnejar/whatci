@@ -21,13 +21,12 @@ const STALE_AFTER_MS = 60 * 60 * 1000
 **/
 export async function fetchGoogleCalendarEvents(env: Env): Promise<CalendarEvent[]> {
   const now = new Date()
-  const url =
-    `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(env.CALENDAR_ID)}/events` +
-    `?key=${env.GOOGLE_API_KEY}` +
-    `&maxResults=2500` +
-    `&singleEvents=true` +
-    `&timeMin=${encodeURIComponent(now.toISOString())}` +
-    `&orderBy=startTime`
+  const url = new URL(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(env.CALENDAR_ID)}/events`)
+  url.searchParams.set('key', env.GOOGLE_API_KEY)
+  url.searchParams.set('maxResults', '2500')
+  url.searchParams.set('singleEvents', 'true')
+  url.searchParams.set('timeMin', now.toISOString())
+  url.searchParams.set('orderBy', 'startTime')
 
   const upstream = await fetch(url)
   if (!upstream.ok) {

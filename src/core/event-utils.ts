@@ -92,21 +92,30 @@ export function formatTime(date_string: string): string {
 }
 
 /**
-  Format a multi-day range as "8-10, Fri-Sun" or "Apr 30-May 2, Thu-Sat"
+  Format a multi-day date range as "8-10" or "Apr 30-May 2"
 **/
-export function formatDayRangeShort(start_string: string, end_string: string): string {
+export function formatDateRange(start_string: string, end_string: string): string {
   const start = new Date(start_string)
   const end = new Date(end_string)
   const start_day = start.getDate()
   const end_day = end.getDate()
-  const start_weekday = start.toLocaleString('en-US', { weekday: 'short' })
-  const end_weekday = end.toLocaleString('en-US', { weekday: 'short' })
   if (start.getMonth() !== end.getMonth()) {
     const start_month = start.toLocaleString('en-US', { month: 'short' })
     const end_month = end.toLocaleString('en-US', { month: 'short' })
-    return `${start_month} ${start_day}-${end_month} ${end_day}, ${start_weekday}-${end_weekday}`
+    return `${start_month} ${start_day}-${end_month} ${end_day}`
   }
-  return `${start_day}-${end_day}, ${start_weekday}-${end_weekday}`
+  return `${start_day}-${end_day}`
+}
+
+/**
+  Format a weekday range as "Fri-Sun"
+**/
+export function formatWeekdayRange(start_string: string, end_string: string): string {
+  const start = new Date(start_string)
+  const end = new Date(end_string)
+  const start_weekday = start.toLocaleString('en-US', { weekday: 'short' })
+  const end_weekday = end.toLocaleString('en-US', { weekday: 'short' })
+  return `${start_weekday}-${end_weekday}`
 }
 
 /**

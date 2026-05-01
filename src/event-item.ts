@@ -2,7 +2,7 @@ import { CSSResult, html, LitElement, unsafeCSS, type TemplateResult } from 'lit
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { customElement, property } from 'lit/decorators.js'
 
-import { formatDayRangeShort, formatDayShort, formatTimePair } from './core/event-utils'
+import { formatDateRange, formatWeekdayRange, formatDayShort, formatTimePair } from './core/event-utils'
 import { type CalendarEvent } from './core/types'
 
 import styles from './event-item.css?inline'
@@ -93,10 +93,8 @@ export class EventItem extends LitElement {
     let date_display
 
     if (is_multi_day) {
-      const label = formatDayRangeShort(e.startDate, e.endDate)
-      const sep = label.indexOf(', ')
-      const day_part = label.slice(0, sep + 1)
-      const week_part = label.slice(sep + 2)
+      const day_part = formatDateRange(e.startDate, e.endDate)
+      const week_part = formatWeekdayRange(e.startDate, e.endDate)
       date_display = html`<span class="nowrap">${day_part}</span> <span class="nowrap">${week_part}</span>`
     } else {
       date_display = formatDayShort(e.startDate)

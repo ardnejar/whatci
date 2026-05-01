@@ -89,4 +89,10 @@ Both scripts print a summary: event count, download size, request time, and writ
 
 # Services
 
-https://search.google.com/search-console?resource_id=sc-domain%3Awhatci.org
+Cloudflare Analytics
+- [whatci.org](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/web-analytics/overview?siteTag~in=29ca36207ba24ff8a61fe68fac4fd303&excludeBots=Yes)
+- [whatci.pages.dev](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/web-analytics/overview?siteTag~in=ecbd81b39eb2420cabf5892f8d6686dc)
+- [Functions?](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/pages/view/whatci/analytics/production)
+
+Google
+- [Search Console](https://search.google.com/search-console?resource_id=sc-domain%3Awhatci.org)

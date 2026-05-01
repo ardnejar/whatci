@@ -11,6 +11,7 @@
     "fetch-cal": "node --experimental-strip-types scripts/fetch-cal.ts",
     "build": "vite build",
     "deploy": "vite build && wrangler pages deploy dist",
+    "deploy:preview": "vite build && wrangler pages deploy dist --branch preview",
     "test": "vitest run"
   },
   "devDependencies": {

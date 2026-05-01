@@ -102,7 +102,7 @@ export class EventDetails extends LitElement {
       font-style: italic;
     }
     .month-header {
-      font-size: 1rem;
+      font-size: 1.8rem;
       font-weight: 600;
       margin: 1.25rem 0 0.4rem;
       color: var(--datetime-color);

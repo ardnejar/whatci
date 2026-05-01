@@ -1,9 +1,11 @@
-import { css, html, LitElement, type TemplateResult } from 'lit'
+import { CSSResult, html, LitElement, unsafeCSS, type TemplateResult } from 'lit'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { customElement, property } from 'lit/decorators.js'
 
 import { formatDayRangeShort, formatDayShort, formatTimePair } from './core/event-utils'
 import { type CalendarEvent } from './core/types'
+
+import styles from './event-item.css?inline'
 
 const URL_RE = /https?:\/\/\S+/g
 const TRAILING_PUNCT_RE = /[.,;:!?)]+$/
@@ -51,6 +53,8 @@ export class EventItem extends LitElement {
   @property({ attribute: false }) event!: CalendarEvent
   @property({ type: Number, attribute: 'day-order' }) dayOrder = 1
 
+  static styles: CSSResult = unsafeCSS(styles)
+
   private renderDescription(): TemplateResult {
     const { description, descriptionLinks } = this.event
     if (!description) return html``
@@ -87,6 +91,7 @@ export class EventItem extends LitElement {
     const e = this.event
     const is_multi_day = e.startDate.slice(0, 10) !== e.endDate.slice(0, 10)
     let date_display
+
     if (is_multi_day) {
       const label = formatDayRangeShort(e.startDate, e.endDate)
       const sep = label.indexOf(', ')
@@ -96,6 +101,7 @@ export class EventItem extends LitElement {
     } else {
       date_display = formatDayShort(e.startDate)
     }
+
     return html`
       <details>
         <summary class="event-card">
@@ -106,96 +112,4 @@ export class EventItem extends LitElement {
       </details>
     `
   }
-
-  static styles = css`
-    :host {
-      display: contents;
-    }
-    details {
-      width: 100%;
-    }
-    summary.event-card {
-      display: flex;
-      align-items: baseline;
-      gap: 0.75rem;
-      padding: 0.3rem 0;
-      cursor: pointer;
-      font: inherit;
-      color: inherit;
-      list-style: none;
-      width: 100%;
-    }
-    summary.event-card::-webkit-details-marker {
-      display: none;
-    }
-    details > summary.event-card:hover,
-    details[open] > summary.event-card,
-    .event-details {
-      background-color: #161616;
-    }
-    .date {
-      flex-shrink: 0;
-      width: 5rem;
-      font-size: 0.9rem;
-      color: var(--datetime-color);
-    }
-    summary .date:not([day-order='1']) {
-      visibility: hidden;
-    }
-    .nowrap {
-      white-space: nowrap;
-    }
-    .summary {
-      font-size: 1rem;
-      /* border-bottom: dotted; */
-      text-decoration: underline;
-      text-decoration-color: hsl(0deg 0% 80%);
-      text-decoration-style: dotted;
-    }
-    .event-details {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.2rem 0 0.4rem;
-      font: inherit;
-      color: inherit;
-      width: 100%;
-    }
-    .event-details .date {
-      color: var(--datetime-color);
-    }
-    .detail-body {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      font-size: 0.9rem;
-      color: var(--datetime-color);
-      min-width: 0;
-      overflow-x: auto;
-    }
-    .detail-location,
-    .detail-desc {
-      margin: 0;
-      font-style: normal;
-    }
-    .detail-location a,
-    .detail-desc a {
-      color: var(--link-color);
-    }
-
-    .detail-desc {
-      font-size: 0.9rem;
-      line-height: 1.5;
-    }
-    @media (prefers-color-scheme: light) {
-      details > summary.event-card:hover,
-      details[open] > summary.event-card,
-      .event-details {
-        background-color: hsl(0 0% 97% / 1);
-      }
-      .summary {
-        text-decoration-color: hsl(0deg 0% 10%);
-      }
-    }
-  `
 }

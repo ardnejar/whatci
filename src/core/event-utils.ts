@@ -116,7 +116,7 @@ export function formatDayShort(date_string: string): string {
   const date = new Date(date_string)
   const weekday = date.toLocaleString('en-US', { weekday: 'short' })
   const day = date.getDate()
-  return `${day}, ${weekday}`
+  return `${day} ${weekday}`
 }
 
 /**

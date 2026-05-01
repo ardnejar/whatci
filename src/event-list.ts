@@ -26,20 +26,22 @@ export class EventDetails extends LitElement {
 
   private loadEvents = () => {
     const now = new Date()
-    const end_date = new Date(now.getFullYear(), now.getMonth() + this.months_shown + 1, 0, 23, 59, 59, 999)
-    this.events = this.api.get('merged', now, end_date)
+    this.events = this.api.get('merged', now, this.endOfMonthOffset(this.months_shown + 1))
   }
 
   private get visibleEvents(): CalendarEvent[] {
-    const now = new Date()
-    const end_date = new Date(now.getFullYear(), now.getMonth() + this.months_shown + 1, 0, 23, 59, 59, 999)
+    const end_date = this.endOfMonthOffset(this.months_shown + 1)
     return this.events.filter((e) => new Date(e.startDate) <= end_date)
   }
 
   private get hasMore(): boolean {
     const now = new Date()
-    const next_end = new Date(now.getFullYear(), now.getMonth() + this.months_shown + 2, 0, 23, 59, 59, 999)
-    return this.api.get('merged', now, next_end).length > this.visibleEvents.length
+    return this.api.get('merged', now, this.endOfMonthOffset(this.months_shown + 2)).length > this.visibleEvents.length
+  }
+
+  private endOfMonthOffset(offset: number): Date {
+    const now = new Date()
+    return new Date(now.getFullYear(), now.getMonth() + offset, 0, 23, 59, 59, 999)
   }
 
   private showMore() {

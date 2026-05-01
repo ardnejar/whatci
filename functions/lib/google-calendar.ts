@@ -4,7 +4,7 @@ export interface Env {
   CALENDAR_ID: string
   GOOGLE_API_KEY: string
   CALENDAR_KV: KVNamespace
-  ADMIN_TOKEN: string
+  ADMIN_KEY: string
 }
 
 interface KvMetadata {
@@ -104,17 +104,13 @@ async function parseRaw(raw: string): Promise<{ plain: string; urls: string[] }>
   return { plain, urls }
 }
 
-async function buildFromCache(
-  plain: string,
-  urls: string[],
-  title_cache?: Map<string, string>,
-): Promise<ProcessedDescription> {
+async function buildFromCache(plain: string, urls: string[], title_cache?: Map<string, string>): Promise<ProcessedDescription> {
   if (urls.length === 0) return { text: plain, links: [] }
   const links = await Promise.all(
     urls.map(async (url) => ({
       url,
       title: title_cache?.get(url) ?? (await fetchPageTitle(url)) ?? 'Website',
-    })),
+    }))
   )
   return { text: plain, links }
 }
@@ -169,9 +165,7 @@ export async function refreshKv(env: Env): Promise<void> {
   const events = await fetchGoogleCalendarEvents(env)
 
   // Parse all descriptions first to collect every URL across all events
-  const parsed = await Promise.all(
-    events.map((event) => (event.descriptionRaw ? parseRaw(event.descriptionRaw) : null)),
-  )
+  const parsed = await Promise.all(events.map((event) => (event.descriptionRaw ? parseRaw(event.descriptionRaw) : null)))
 
   // Fetch each unique URL exactly once
   const all_urls = [...new Set(parsed.flatMap((p) => p?.urls ?? []))]
@@ -179,7 +173,7 @@ export async function refreshKv(env: Env): Promise<void> {
   await Promise.all(
     all_urls.map(async (url) => {
       title_cache.set(url, (await fetchPageTitle(url)) ?? 'Website')
-    }),
+    })
   )
 
   // Assemble results from the shared cache — no further network requests
@@ -191,7 +185,7 @@ export async function refreshKv(env: Env): Promise<void> {
         event.description = text
         event.descriptionLinks = links.length > 0 ? links : null
       }
-    }),
+    })
   )
 
   await env.CALENDAR_KV.put(KV_KEY, JSON.stringify(events), {

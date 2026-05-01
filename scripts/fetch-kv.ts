@@ -28,12 +28,12 @@ if (is_remote) {
 }
 
 if (!is_remote) {
-  const admin_token = process.env.ADMIN_TOKEN
-  if (!admin_token) {
-    console.error('ADMIN_TOKEN is not set in .dev.vars — cannot refresh KV.')
+  const admin_key = process.env.ADMIN_KEY
+  if (!admin_key) {
+    console.error('ADMIN_KEY is not set in .dev.vars — cannot refresh KV.')
     process.exit(1)
   }
-  const refresh_url = `${base_url}/admin/refresh?token=${encodeURIComponent(admin_token)}`
+  const refresh_url = `${base_url}/admin/refresh?key=${encodeURIComponent(admin_key)}`
   const refresh_start = Date.now()
   const refresh_res = await fetch(refresh_url, { redirect: 'manual' })
   const refresh_ms = Date.now() - refresh_start

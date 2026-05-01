@@ -48,7 +48,6 @@ export class EventItem extends LitElement {
 
   private renderDetails(): TemplateResult {
     const e = this.event
-    const is_multi_day = e.startDate.slice(0, 10) !== e.endDate.slice(0, 10)
     const is_all_day = !e.startDate.includes('T')
     const location = e.location
       ? e.location.startsWith('http')
@@ -57,12 +56,7 @@ export class EventItem extends LitElement {
       : null
 
     let time_display
-    if (is_multi_day) {
-      if (!is_all_day) {
-        const [start_text, end_text] = formatTimePair(e.startDate, e.endDate)
-        time_display = html`<time datetime="${e.startDate}">${start_text}</time>–<time datetime="${e.endDate}">${end_text}</time>`
-      }
-    } else if (!is_all_day) {
+    if (!is_all_day) {
       const [start_text, end_text] = formatTimePair(e.startDate, e.endDate)
       time_display = html`<time datetime="${e.startDate}">${start_text}</time>–<time datetime="${e.endDate}">${end_text}</time>`
     }

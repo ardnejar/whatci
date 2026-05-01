@@ -3,7 +3,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js'
 import { customElement, property } from 'lit/decorators.js'
 
 import { formatDayRangeShort, formatDayShort, formatTimePair } from './core/event-utils'
-import { type CalendarEvent } from './EventStore'
+import { type CalendarEvent } from './core/types'
 
 @customElement('event-item')
 export class EventItem extends LitElement {

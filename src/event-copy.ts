@@ -3,7 +3,7 @@ import { customElement, state } from 'lit/decorators.js'
 
 import { CalendarFetchApi } from './calendar-fetch-api'
 import { renderEventsSummaryTable, renderEventsSummaryText } from './core/renderer'
-import { type CalendarEvent } from './EventStore'
+import { type CalendarEvent } from './core/types'
 
 @customElement('event-copy')
 export class EventCopy extends LitElement {

@@ -2,7 +2,7 @@ import { css, html, LitElement } from 'lit'
 import { customElement, state } from 'lit/decorators.js'
 
 import { CalendarFetchApi } from './calendar-fetch-api'
-import { type CalendarEvent } from './EventStore'
+import { type CalendarEvent } from './core/types'
 import './event-item'
 
 @customElement('event-list')

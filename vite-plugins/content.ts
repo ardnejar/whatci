@@ -7,7 +7,8 @@ const CONTENT_DIR = 'content'
 
 /**
   Scans the content/ folder for *.md files and injects each as HTML into index.html.
-  The placeholder is derived from the filename: message.md → %VITE_MESSAGE%
+  The placeholder is derived from the filename: message.md → %VITE_MESSAGE%, admin-help.md → %VITE_ADMIN_HELP%
+  Hyphens in filenames are normalized to underscores in the placeholder.
   The wrapper div uses the filename as its class: message.md → <div class="message">
 **/
 export function content(): Plugin {
@@ -18,7 +19,7 @@ export function content(): Plugin {
   }
 
   function placeholder(filePath: string): string {
-    return `%VITE_${basename(filePath, '.md').toUpperCase()}%`
+    return `%VITE_${basename(filePath, '.md').toUpperCase().replaceAll('-', '_')}%`
   }
 
   function buildBlock(filePath: string): string {

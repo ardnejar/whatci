@@ -1,20 +1,15 @@
 # What CI — Admin Help
 
-This page is for people who manage the What CI Google Calendar and website content.
 
----
+## Calendar Events
 
-## How Calendar Events Appear on the Site
+Events are pulled from the [**What CI Google Calendar**](/calendar) and cached for the What CI page. Edit events with any inerface you have connected to the calendar, including the Apple Calendar.app. You can [add the calender to your Google Account](/calendar-subscribe), or subscribe to it with any calendar app using the <a-copy href="/ical" message="iCal link copied">iCal URL</a-copy>: Copy the link and paste it into your calendar app as a new subscription.
 
-Events are pulled from the **What CI Google Calendar** and cached on the What CI page. **To add or update an event:** edit it directly in Google Calendar.
+On the home page each event displays its `title`, `date`, `time`, `location`, and `description`. The `description` supports basic formatting — line breaks are preserved. HTML is not supported. Preferably, The description should be one sentance with a URL to the event's full details. It can also just be a URL with no additional text.
 
-### What the site shows
+If you are editing event on **Apple Calendar**, note that The `description` field is labeled as `notes`, and the `URL` field is ignored. 
 
-Each event displays its `title`, `date`, `time`, `location`, and `description`. The description supports basic formatting — line breaks are preserved. HTML is not supported. Preferably, The description should be one sentance with a URL to more information. It can also just be a URL with no additional text.
-
-It does not pull from the URL field that is accessable in Apple Calendar. It only get's data from `title`, `date`, `time`, `location`, and `description`.
-
-If you put a URL in the location field it will mark it as an online event.
+If you put a URL in the `location` field it will mark it as an online event.
 
 ---
 
@@ -26,18 +21,14 @@ Changes in Google Calendar appear on the site after the cache updates — which 
 https://whatci.org/admin/refresh?key=ADMIN_KEY
 ```
 
-Get the `ADMIN_KEY` from a What CI team member. On success, you are redirected to the homepage.
+Get the `ADMIN_KEY` from a What CI team member.
+
+On success, you are redirected to the homepage.
 
 ---
 
 ## Short Links
 
-The links listed on the [What CI homepage](https://whatci.org) each have a short `whatci.org/…` address you can share. For example, `whatci.org/facebook` forwards to the What CI Facebook page. These are easier to type or remember than the full destination URLs.
+The links listed on the [What CI homepage](https://whatci.org) each have a short `whatci.org/<slug>` address you can share. For example, `whatci.org/facebook` forwards to the What CI Facebook page. These are easier to type or remember than the full destination URLs.
 
-To add or change a short link, contact the site maintainer.
-
----
-
-## Contacts
-
-For help with the website or short links, contact the site maintainer.
+<link-list></link-list>

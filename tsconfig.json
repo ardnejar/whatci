@@ -24,6 +24,14 @@
     "forceConsistentCasingInFileNames": true,
 
     /* Module Resolution */
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "rules": {
+          "no-invalid-css": "off"
+        }
+      }
+    ],
     "resolveJsonModule": true,
     "isolatedModules": true
   },

@@ -1,4 +1,4 @@
-# [What CI](/) — Admin Help
+# [What CI](/) • Admin Help
 
 
 ## Calendar Events
@@ -27,6 +27,8 @@ https://whatci.org/admin/refresh?key=ADMIN_KEY
 
 ## Short Links
 
-The links listed on the [What CI homepage](https://whatci.org) each have a short `whatci.org/<slug>` address you can share. For example, `whatci.org/facebook` forwards to the What CI Facebook page. These are easier to type or remember than the full destination URLs.
+[Short links](/links) to What CI services. Use these to remember and share the services.
+  
 
-<link-list></link-list>
+
+  

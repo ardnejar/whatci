@@ -10,7 +10,6 @@ export default defineConfig({
       input: {
         main: 'index.html',
         copy: 'copy.html',
-        adminHelp: 'admin/help.html',
       },
     },
   },
@@ -19,5 +18,13 @@ export default defineConfig({
       '/calendar-events': 'http://localhost:8788',
     },
   },
-  plugins: [content(), shortlinks()],
+  plugins: [
+    content({
+      pages: [
+        { route: 'links.html', md: 'links', title: 'What CI — Short Links' },
+        { route: 'admin/help.html', md: 'admin-help', title: 'What CI — Admin Help' },
+      ],
+    }),
+    shortlinks(),
+  ],
 })

@@ -18,11 +18,19 @@ https://whatci.org/admin/refresh?key=ADMIN_KEY
 
 The cache is also refreshed automatically when stale (older than 1 hour) after the next calendar request.
 
-## Content and Shortlink Editing
+## Content Snippetes, Pages and Short Links
 
-Edit [`content/message.md`](content/message.md) to change the text shown above the links on the index page. Supports full Markdown.
+Edit `*.md` file in [`content/`](content/) for snippets and page content. Files are parsed as Markdown and injected at build time via placeholders derived from the filename — `content/footer.md` → `%FOOTER%`.
 
-Any `*.md` file added to the [`content/`](content/) folder is automatically injected into `index.html` at build time. The placeholder is derived from the filename — `content/footer.md` maps to `%VITE_FOOTER%`. Add the placeholder to the HTML where you want the content to appear.
+### App Pages
+
+Non-root pages (`/links`, `/admin/help`, etc.) are generated from [`app.html`](app.html). To add a page, create `content/my-page.md` and add an entry to `pages` in [`vite.config.ts`](vite.config.ts):
+
+```ts
+{ route: 'my-page.html', md: 'my-page', title: 'What CI — My Page' }
+```
+
+### Short Links
 
 Edit [`content/links.json`](content/links.json) to add or change links:
 

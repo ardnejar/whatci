@@ -1,4 +1,4 @@
-[Facebook, Bellingham Contact Improvisation](/facebook)
+[<svg-inline src="facebook-icon"></svg-inline> Facebook, Bellingham Contact Improvisation](/facebook)
 
 [Carmen Serber's Events and Introspection](/carmen)
 

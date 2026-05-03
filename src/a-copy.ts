@@ -1,7 +1,7 @@
 import { LitElement, css, html, type CSSResult, type TemplateResult } from 'lit'
 import { property, query } from 'lit/decorators.js'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
-import copyIcon from '/copy-icon.svg?url&raw'
+import copyIcon from '../content/icons/copy-icon.svg?raw'
 
 /*
 
@@ -10,8 +10,6 @@ If you intend to import that asset, put the file in the src directory, and use /
 If you intend to use the URL of that asset, use /copy-icon.svg?url&raw.
 
 */
-
-const DISPLAY_MS = 2000
 
 /**
   Inline link that copies its resolved href to the clipboard on click
@@ -27,7 +25,6 @@ export class ACopy extends LitElement {
   @property() message = 'Link copied'
 
   @query('[popover]') private _popover!: HTMLDivElement
-  private _hide_timer: ReturnType<typeof setTimeout> | null = null
 
   static styles: CSSResult = css`
     :host {
@@ -55,18 +52,36 @@ export class ACopy extends LitElement {
     [popover] {
       position: fixed;
       position-anchor: --copy-anchor;
-      position-area: top center;
+      position-area: top;
       margin: 0 0 8px;
       padding: 0.5rem 1.25rem;
       border: none;
       border-radius: 6px;
-      white-space: nowrap;
+      max-width: min(350px, 90vw);
       background: #ffbe64;
       color: #000;
       font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      overflow: visible;
+    }
+    [popover]::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 7px solid transparent;
+      border-bottom: none;
+      border-top-color: #ffbe64;
+    }
+    .tile {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.1em;
+    }
+    .message {
+      font-weight: unset;
+      font-size: 1rem;
     }
   `
 
@@ -78,14 +93,7 @@ export class ACopy extends LitElement {
   }
 
   private _showPopover(): void {
-    if (this._hide_timer !== null) {
-      clearTimeout(this._hide_timer)
-    }
     this._popover.showPopover()
-    this._hide_timer = setTimeout(() => {
-      this._popover.hidePopover()
-      this._hide_timer = null
-    }, DISPLAY_MS)
   }
 
   render(): TemplateResult {
@@ -94,7 +102,10 @@ export class ACopy extends LitElement {
         <slot></slot>
         ${unsafeHTML(copyIcon)}
       </a>
-      <div popover="manual">${this.message}</div>
+      <div popover>
+        <div class="tile">URL copied</div>
+        <div class="message">${this.message}</div>
+      </div>
     `
   }
 }

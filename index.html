@@ -86,6 +86,26 @@
         min-height: 30vh;
         padding: var(--content-padding);
       }
+      hr {
+        border: none;
+        height: 1px;
+        background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
+      }
+      .footer ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      @container (min-width: 540px) {
+        .footer ul {
+          flex-direction: row;
+          gap: 1.5rem;
+          justify-content: space-between;
+        }
+      }
       @media (prefers-color-scheme: light) {
         :root {
           --datetime-color: #555;
@@ -111,11 +131,9 @@
         <!-- Calendar Help -->
         %VITE_CALENDAR_HELP%
 
-        <!-- Newsletter -->
-        %VITE_NEWSLETTER%
-        <section class="links">
-          <!-- <link-list></link-list> -->
-        </section>
+        <!-- Footer -->
+        <hr />
+        %VITE_FOOTER%
       </article>
     </main>
 

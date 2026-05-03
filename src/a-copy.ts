@@ -1,7 +1,15 @@
 import { LitElement, css, html, type CSSResult, type TemplateResult } from 'lit'
 import { property, query } from 'lit/decorators.js'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
-import copyIcon from '../public/copy-icon.svg?raw'
+import copyIcon from '/copy-icon.svg?url&raw'
+
+/*
+
+Assets in public directory cannot be imported from JavaScript.
+If you intend to import that asset, put the file in the src directory, and use /src/copy-icon.svg?raw instead of /public/copy-icon.svg?raw.
+If you intend to use the URL of that asset, use /copy-icon.svg?url&raw.
+
+*/
 
 const DISPLAY_MS = 2000
 

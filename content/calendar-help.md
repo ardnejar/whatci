@@ -1,0 +1,1 @@
+For monthly ![monthly view icon](/monthly-icon.svg) and weekly views see the [What CI Google Calendar](/calendar). You can add this to your Google Calendar with [Google Calendar Subscribe](/calendar-subscribe). For other calendar apps use the <a-copy href="/ical" message="iCal link copied">iCal URL</a-copy> to add it as a new subscription.

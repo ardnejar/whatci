@@ -48,6 +48,8 @@
       section {
         margin-top: 2rem;
         margin-bottom: 2rem;
+        padding: var(--content-padding);
+        line-height: 1.6;
       }
       h1 {
         font-size: 20cqi;
@@ -63,19 +65,14 @@
         background-clip: text;
         white-space: nowrap;
       }
-      .message {
-        margin-bottom: 2rem;
-        padding: var(--content-padding);
-        line-height: 1.6;
-      }
-      .message p {
+      p {
         margin: 0 0 0.75rem;
       }
-      .message p:last-child {
+      p:last-child {
         margin-bottom: 0;
       }
-      .message a {
-        color: #6ea8ff;
+      a {
+        color: var(--link-color);
       }
       event-list {
         min-height: 30vh;
@@ -98,8 +95,8 @@
           background: #ffffff;
           color: #1a1a1a;
         }
-        .message a {
-          color: #0057d8;
+        a {
+          color: var(--link-color);
         }
       }
     </style>
@@ -111,9 +108,13 @@
         <section class="events">
           <event-list></event-list>
         </section>
+        <!-- Calendar Help -->
+        %VITE_CALENDAR_HELP%
 
+        <!-- Newsletter -->
+        %VITE_NEWSLETTER%
         <section class="links">
-          <link-list></link-list>
+          <!-- <link-list></link-list> -->
         </section>
       </article>
     </main>

@@ -1,8 +1,10 @@
 # What CI — Page and URL Shortener
 
-https://whatci.org/
-
 A Cloudflare Pages site and URL shortener that displays a list of events from the What CI Google Calendar.
+
+Production: https://whatci.org/
+
+Staging: https://preview.whatci.pages.dev
 
 ## Calendar Integration
 

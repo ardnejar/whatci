@@ -37,8 +37,6 @@ export class LinkList extends LitElement {
 
   render(): TemplateResult {
     return html`
-      <h2>Resources and Subscription Links</h2>
-
       ${Object.entries(links as Record<string, LinkEntry>)
         .filter(([, entry]) => entry.webpage)
         .map(

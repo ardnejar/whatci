@@ -2,7 +2,7 @@
   "name": "whatci",
   "private": true,
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "What CI website and tools",
   "scripts": {
     "dev": "vite --port 5788",

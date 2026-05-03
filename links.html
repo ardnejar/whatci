@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What CI — Short Links</title>
+
+    <meta name="color-scheme" content="dark light" />
+
+    <style>
+      :root {
+        color-scheme: dark light;
+        --datetime-color: hsl(254deg 100% 81%);
+        --link-color: #6ea8ff;
+        --highlight-color: #ffbe64;
+        --content-padding: 0 1.2rem;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+      body {
+        width: 100vw;
+        min-height: 100dvh;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+        background: #000;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        color: #fff;
+      }
+      main {
+        width: 100vw;
+        max-width: 540px;
+        container-type: inline-size;
+      }
+      h1 {
+        font-weight: 1000;
+        margin-bottom: 1rem;
+        background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        white-space: nowrap;
+      }
+      .links {
+        margin-bottom: 2rem;
+        padding: var(--content-padding);
+        line-height: 1.6;
+      }
+      p {
+        margin: 0 0 0.75rem;
+      }
+      p:last-child {
+        margin-bottom: 0;
+      }
+      a {
+        color: var(--link-color);
+      }
+      @media (prefers-color-scheme: light) {
+        :root {
+          --datetime-color: #555;
+          --link-color: #0057d8;
+        }
+        body {
+          background: #ffffff;
+          color: #1a1a1a;
+        }
+        a {
+          color: var(--link-color);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>%VITE_LINKS%</main>
+  </body>
+  <script type="module" src="/src/help.ts"></script>
+</html>

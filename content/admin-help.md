@@ -11,9 +11,9 @@ Events are pulled from the [**What CI Google Calendar**](/calendar) and cached f
 
 - If you put a URL in the `location` field it will mark it as an online event.
 
-### Forcing an Immediate Update
+### Cache Updates
 
-Changes in Google Calendar appear on the site after the cache updates — which happens after the next visit that is more than an hour since the last cache update. To force your change to appear right away, visit:
+Changes in Google Calendar should appear on the site within seconds — Google sends a push notification to the site on every calendar change. In case the notification doesn't go through, you can manually force a cache refresh, visit:
 
 ```
 https://whatci.org/admin/refresh?key=ADMIN_KEY

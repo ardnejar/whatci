@@ -8,15 +8,17 @@ Staging: https://preview.whatci.pages.dev
 
 ## Calendar Integration
 
-Calendar events are imported from Google Calendar and cached in Cloudflare KV.
+Cloudflare web workers
+- `calendar-events.ts`
+- `calendar-webhook.ts`
 
-To manually force a cache refresh, visit:
+Calendar events are cached in Cloudflare KV and updated in real time via Google Calendar push notifications. Google requires a watch channel to deliver notifications; it expires after ~7 days, and the worker renews it before expiry. As a fallback, the cache refreshes automatically after 1 hour of staleness.
+
+To manually force a cache refresh and re-register the watch channel, visit:
 
 ```
 https://whatci.org/admin/refresh?key=ADMIN_KEY
 ```
-
-The cache is also refreshed automatically when stale (older than 1 hour) after the next calendar request.
 
 ## Content Snippetes, Pages and Short Links
 
@@ -92,7 +94,8 @@ Both scripts print a summary: event count, download size, request time, and writ
 | Endpoint | Description |
 |---|---|
 | [/calendar-events](/calendar-events) | Calendar events from KV cache as `CalendarEvent[]` JSON. Triggers a blocking fetch on cold start; background refresh when stale. |
-| [/admin/refresh?key=ADMIN_KEY](/admin/refresh?key=ADMIN_KEY) | Force-refreshes the KV cache from Google Calendar. Requires `ADMIN_KEY`. Redirects to homepage on success. |
+| [/calendar-webhook](/calendar-webhook) | Receives Google Calendar push notifications (POST). Verifies the channel token and immediately refreshes KV on event changes. |
+| [/admin/refresh?key=ADMIN_KEY](/admin/refresh?key=ADMIN_KEY) | Force-refreshes the KV cache from Google Calendar and re-registers the push notification watch channel. Requires `ADMIN_KEY`. Redirects to homepage on success. |
 | [/json-ld](/json-ld) | The schema.org `ItemList` JSON-LD payload that gets injected into the page — events for the next 6 months, merged. Useful for inspection. |
 | `/<slug>` | Redirects to the destination URL for any slug with `"redirect": true` in `content/links.json`. |
 
@@ -102,7 +105,11 @@ Both scripts print a summary: event count, download size, request time, and writ
 Cloudflare Analytics
 - [whatci.org](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/web-analytics/overview?siteTag~in=29ca36207ba24ff8a61fe68fac4fd303&excludeBots=Yes)
 - [whatci.pages.dev](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/web-analytics/overview?siteTag~in=ecbd81b39eb2420cabf5892f8d6686dc)
-- [Functions?](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/pages/view/whatci/analytics/production)
+- [Functions](https://dash.cloudflare.com/d3b80d9755e6ad8f0cf75743e0f99383/pages/view/whatci/analytics/production)
 
 Google
-- [Search Console](https://search.google.com/search-console?resource_id=sc-domain%3Awhatci.org)
+- [Search Console](https://search.google.com/search-console?resource_id=sc-domain:whatci.org)
+- [Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts?project=what-ci)
+
+GitHub
+- [Repository](https://github.com/ardnejar/whatci)

@@ -1,5 +1,5 @@
 import type { Env } from './lib/google-calendar.ts'
-import { getKvEvents, refreshKv } from './lib/google-calendar.ts'
+import { getKvEvents, maybeRenewWatchChannel, refreshKv } from './lib/google-calendar.ts'
 
 /**
   Returns calendar events as CalendarEvent[] JSON, served from KV cache.
@@ -22,7 +22,7 @@ export const onRequestGet = async ({
   const { events, is_stale } = await getKvEvents(env)
 
   if (events === null) {
-    // Cold start — block until KV is populated
+    console.log('[calendar-events] Cold start — KV empty, blocking fetch from Google Calendar')
     await refreshKv(env)
     const { events: fresh } = await getKvEvents(env)
     return new Response(JSON.stringify(fresh ?? []), {
@@ -31,7 +31,11 @@ export const onRequestGet = async ({
   }
 
   if (is_stale) {
+    console.log('[calendar-events] KV cache is stale — triggering background refresh')
     waitUntil(refreshKv(env))
+    waitUntil(maybeRenewWatchChannel(env))
+  } else {
+    console.log('[calendar-events] Serving from KV cache')
   }
 
   return new Response(JSON.stringify(events), {

@@ -1,5 +1,5 @@
 import type { Env } from '../lib/google-calendar.ts'
-import { refreshKv } from '../lib/google-calendar.ts'
+import { refreshKv, registerWatchChannel } from '../lib/google-calendar.ts'
 
 const COOKIE_NAME = 'admin_key'
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 180 // 180 days
@@ -33,10 +33,21 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
   const key = queryKey ?? cookieKey
 
   if (key !== env.ADMIN_KEY) {
+    console.log('[admin/refresh] Unauthorized — key mismatch')
     return new Response('Unauthorized', { status: 401 })
   }
 
+  console.log('[admin/refresh] Refreshing KV cache')
   await refreshKv(env)
+
+  console.log('[admin/refresh] Registering watch channel')
+  try {
+    await registerWatchChannel(env)
+    console.log('[admin/refresh] Watch channel registered successfully')
+  } catch (err) {
+    console.log(`[admin/refresh] Watch channel registration failed: ${err instanceof Error ? err.message : String(err)}`)
+    return new Response(`Watch channel registration failed: ${err instanceof Error ? err.message : String(err)}`, { status: 500 })
+  }
 
   const headers = new Headers({ Location: '/' })
 

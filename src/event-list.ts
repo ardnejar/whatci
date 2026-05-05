@@ -9,24 +9,53 @@ import './event-item'
 export class EventDetails extends LitElement {
   @state() private events: CalendarEvent[] = []
   @state() private months_shown = 1
+  @state() private loadingState: 'loading' | 'fading' | 'loaded' | 'timeout' = 'loading'
 
   private cal = new CalendarStore()
+  private timeoutId: ReturnType<typeof setTimeout> | null = null
+  private connectedAt = 0
 
   connectedCallback() {
     super.connectedCallback()
+    this.connectedAt = Date.now()
     this.loadEvents()
     window.addEventListener('calendar-updated', this.loadEvents.bind(this))
+    this.timeoutId = setTimeout(() => {
+      if (this.loadingState === 'loading') this.loadingState = 'timeout'
+    }, 5000)
     this.cal.fetch().catch((err) => console.error('Calendar fetch failed:', err))
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
     window.removeEventListener('calendar-updated', this.loadEvents.bind(this))
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId)
+      this.timeoutId = null
+    }
   }
 
   private loadEvents = () => {
     const now = new Date()
     this.events = this.cal.get('merged', now, this.endOfMonthOffset(this.months_shown))
+    if (this.cal.eventCount !== null) {
+      if (this.timeoutId !== null) {
+        clearTimeout(this.timeoutId)
+        this.timeoutId = null
+      }
+      if (this.loadingState === 'loading') {
+        const remaining = Math.max(0, 2000 - (Date.now() - this.connectedAt))
+        this.timeoutId = setTimeout(() => {
+          this.loadingState = 'fading'
+          this.timeoutId = setTimeout(() => {
+            this.loadingState = 'loaded'
+            this.timeoutId = null
+          }, 400)
+        }, remaining)
+      } else {
+        this.loadingState = 'loaded'
+      }
+    }
   }
 
   private get visibleEvents(): CalendarEvent[] {
@@ -49,6 +78,19 @@ export class EventDetails extends LitElement {
     this.loadEvents()
   }
 
+  private retry() {
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId)
+      this.timeoutId = null
+    }
+    this.connectedAt = Date.now()
+    this.loadingState = 'loading'
+    this.timeoutId = setTimeout(() => {
+      if (this.loadingState === 'loading') this.loadingState = 'timeout'
+    }, 5000)
+    this.cal.fetch().catch((err) => console.error('Calendar fetch failed:', err))
+  }
+
   private groupByMonth(events: CalendarEvent[]): Map<string, CalendarEvent[]> {
     const groups = new Map<string, CalendarEvent[]>()
     const current_year = new Date().getFullYear()
@@ -64,7 +106,23 @@ export class EventDetails extends LitElement {
   }
 
   render() {
-    if (this.cal.eventCount === null) return html`<h3 class="empty">Loading…</h3>`
+    if (this.loadingState === 'timeout') {
+      return html`
+        <div>
+          <h3 class="month-header">Calendar</h3>
+          <span class="placeholder-summary"><button class="reload" @click=${this.retry.bind(this)}>Reload</button></span>
+        </div>
+      `
+    }
+
+    if (this.loadingState === 'loading' || this.loadingState === 'fading') {
+      return html`
+        <div class=${this.loadingState === 'fading' ? 'placeholder-fade-out' : ''}>
+          <h3 class="month-header">Calendar</h3>
+          <span class="placeholder-summary">Loading</span>
+        </div>
+      `
+    }
 
     const visible = this.visibleEvents
     if (visible.length === 0) return html`<h3 class="empty">No upcoming events found.</h3>`
@@ -109,6 +167,30 @@ export class EventDetails extends LitElement {
       font-style: italic;
       padding: var(--content-padding);
     }
+    .placeholder-summary {
+      display: block;
+      font-size: 1rem;
+      font-weight: 1000;
+      background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      padding: var(--content-padding);
+    }
+    .reload {
+      border: 1px solid grey;
+      border-radius: 5px;
+      cursor: pointer;
+      font: inherit;
+      font-weight: inherit;
+      background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .reload:hover {
+      text-decoration: underline;
+    }
     .month-header {
       margin: 1.25rem 0 0.4rem;
       padding: var(--content-padding);
@@ -144,6 +226,19 @@ export class EventDetails extends LitElement {
     }
     .more:hover {
       text-decoration: underline;
+    }
+    @keyframes slide-out-top {
+      from {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-1rem);
+      }
+    }
+    .placeholder-fade-out {
+      animation: slide-out-top 400ms ease forwards;
     }
     @keyframes slide-in-bottom {
       from {

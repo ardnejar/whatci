@@ -51,6 +51,9 @@
         padding: var(--content-padding);
         line-height: 1.6;
       }
+      section.events {
+        padding: unset;
+      }
       h1 {
         font-size: 20cqi;
         font-weight: 1000;
@@ -75,7 +78,8 @@
         color: var(--link-color);
       }
       event-list {
-        min-height: 30vh;
+        display: block;
+        min-height: 50vh;
       }
       .links {
         display: flex;
@@ -125,9 +129,11 @@
     <main>
       <article>
         %MESSAGE%
+
         <section class="events">
           <event-list></event-list>
         </section>
+
         <!-- Calendar Help -->
         %CALENDAR_HELP%
 

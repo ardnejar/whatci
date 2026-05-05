@@ -14,5 +14,5 @@ You can [add the calendar to your Google Account](/calendar-subscribe), or subsc
 
 ### Cache
 
-Changes in Google Calendar should appear on the site within seconds via push notification. To force a manual refresh, use the [Refresh page](/admin/refresh).
+Changes in Google Calendar should appear on the site within seconds via push notification. To force a manual refresh, use the [Refresh Calendar](/admin/refresh) page.
 

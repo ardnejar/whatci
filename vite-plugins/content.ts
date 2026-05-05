@@ -1,9 +1,44 @@
 import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs'
 import { dirname, resolve, basename, extname } from 'node:path'
-import { marked } from 'marked'
+import { Marked } from 'marked'
 import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
-
 const CONTENT_DIR = 'content'
+const ICONS_DIR = `${CONTENT_DIR}/icons`
+
+/**
+  Load an SVG icon by name from content/icons/, injecting fill="currentColor".
+  Returns null if the file is not found.
+**/
+function loadIcon(name: string): string | null {
+  try {
+    const svg = readFileSync(`${ICONS_DIR}/${name}.svg`, 'utf8').trim()
+    return svg.replace(/^<svg /, '<svg fill="currentColor" ')
+  } catch {
+    return null
+  }
+}
+
+/**
+  Build a marked instance with a custom image renderer.
+  Images whose href starts with "icon:" are replaced with an inline SVG span.
+  Example markdown: ![facebook](icon:facebook-icon)
+**/
+function buildMarked(): Marked {
+  const instance = new Marked()
+  instance.use({
+    renderer: {
+      image({ href, text }: { href: string; text: string; title: string | null }): string | false {
+        if (!href.startsWith('icon:')) return false
+        const name = href.slice('icon:'.length)
+        const svg = loadIcon(name)
+        const aria = text ? ` aria-label="${text}"` : ' aria-hidden="true"'
+        if (!svg) return `<span class="svg-inline"${aria}></span>`
+        return `<span class="svg-inline"${aria}>${svg}</span>`
+      },
+    },
+  })
+  return instance
+}
 
 export interface PageEntry {
   /** Output path relative to dist root, e.g. "admin/help.html" */
@@ -36,8 +71,10 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
     return `%${basename(filePath, '.md').toUpperCase().replaceAll('-', '_')}%`
   }
 
+  const md = buildMarked()
+
   function buildBlock(filePath: string): string {
-    const html = marked.parse(readFileSync(filePath, 'utf8')) as string
+    const html = md.parse(readFileSync(filePath, 'utf8')) as string
     const name = basename(filePath, '.md')
     return `<section class="${name}">${html.trim()}</section>`
   }
@@ -51,9 +88,7 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
 
   function renderPage(page: PageEntry, appHtml: string): string {
     const mdPath = `${CONTENT_DIR}/${page.md}.md`
-    return appHtml
-      .replace('%TITLE%', extractTitle(mdPath))
-      .replace('%CONTENT%', buildBlock(mdPath))
+    return appHtml.replace('%TITLE%', extractTitle(mdPath)).replace('%CONTENT%', buildBlock(mdPath))
   }
 
   /** Derive the dev-server URL path from a route, e.g. "admin/help.html" → "/admin/help" */
@@ -115,6 +150,13 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
       }
 
       for (const filePath of mdFiles()) watchReload(resolve(filePath))
+
+      // Watch icon SVGs — they are inlined at build time so changes need a reload
+      try {
+        for (const f of readdirSync(ICONS_DIR).filter((f) => extname(f) === '.svg')) {
+          watchReload(resolve(`${ICONS_DIR}/${f}`))
+        }
+      } catch { /* icons dir may not exist */ }
 
       if (pages.length === 0) return
 

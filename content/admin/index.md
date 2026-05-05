@@ -1,31 +1,18 @@
-# [What CI](/) • Admin Help
-
+# [What CI](/) • Admin
 
 ## Calendar Events
 
-Events are pulled from the [**What CI Google Calendar**](/calendar) and cached for the What CI page. Edit events with any inerface you have connected to the calendar, including the Apple Calendar.app.
+Events are pulled from the [**What CI Google Calendar**](/calendar) and cached for the site. Edit events using any interface connected to the calendar, including Apple Calendar.
 
-You can [add the calender to your Google Account](/calendar-subscribe), or subscribe to it with any calendar app using the <a-copy href="/ical" message="iCal link copied">iCal URL</a-copy>: Copy the link and paste it into your calendar app as a new subscription.
+You can [add the calendar to your Google Account](/calendar-subscribe), or subscribe with any calendar app using the <a-copy href="/ical" message="iCal link copied">iCal URL</a-copy>.
 
-- On the home page each event displays its `title`, `date`, `time`, `location`, and `description`. The `description` supports basic formatting — line breaks are preserved. HTML is not supported. Preferably, The description should be one sentance with a URL to the event's full details. It can also just be a URL with no additional text.
+- Each event displays its `title`, `date`, `time`, `location`, and `description`. The `description` supports basic formatting — line breaks are preserved, HTML is not. Preferably one sentence with a URL to the event's full details, or just a plain URL.
 
-- If you are editing event on **Apple Calendar**, note that The `description` field is labeled as `notes`, and the `URL` field is ignored. 
+- On **Apple Calendar**, the `description` field is labeled `notes`, and the `URL` field is ignored.
 
-- If you put a URL in the `location` field it will mark it as an online event.
+- Putting a URL in the `location` field marks it as an online event.
 
-### Cache Updates
+### Cache
 
-Changes in Google Calendar should appear on the site within seconds — Google sends a push notification to the site on every calendar change. In case the notification doesn't go through, you can manually force a cache on the [Refresh Page](/admin/refresh)
+Changes in Google Calendar should appear on the site within seconds via push notification. To force a manual refresh, use the [Refresh page](/admin/refresh).
 
-- Access requires a one-time PIN sent to your email. You must be on the approved email list to access the admin section.
-
-
----
-
-## Short Links
-
-[Short links](/links) to What CI services. Use these to remember and share the services.
-  
-
-
-  

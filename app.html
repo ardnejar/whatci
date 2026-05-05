@@ -35,6 +35,7 @@
         width: 100vw;
         max-width: 540px;
         container-type: inline-size;
+        padding: 4rem 1.2rem;
       }
       .admin-footer {
         margin-top: 2rem;
@@ -43,12 +44,11 @@
       }
       h1 {
         font-weight: 1000;
-        margin-bottom: 1rem;
+        margin-bottom: 3rem;
         background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
-        white-space: nowrap;
       }
       h2 {
         margin-bottom: 1rem;
@@ -97,16 +97,24 @@
       .admin-footer ul {
         list-style: none;
         padding: 0;
-        margin: 0;
+        margin-top: 1rem;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 1rem;
       }
-      @container (min-width: 540px) {
+      .admin-footer li {
+        font-size: 2rem;
+        font-weight: 1000;
+      }
+      @container (min-width: 500px) {
         .admin-footer ul {
           flex-direction: row;
           gap: 1.5rem;
           justify-content: space-between;
+        }
+        .admin-footer li {
+          font-size: 1.2rem;
+          font-weight: 800;
         }
       }
       @media (prefers-color-scheme: light) {

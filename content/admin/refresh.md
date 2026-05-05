@@ -1,4 +1,4 @@
-# [What CI](/) • Admin Help
+# [What CI](/) • [Admin](/admin) • Refresh
 
 Refresh the calendar cache and re-register the Google Calendar watch channel.
 

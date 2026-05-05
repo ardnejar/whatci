@@ -21,8 +21,9 @@ export default defineConfig({
   plugins: [
     content({
       pages: [
-        { route: 'links.html', md: 'links', title: 'What CI — Short Links' },
-        { route: 'admin/help.html', md: 'admin-help', title: 'What CI — Admin Help' },
+        { route: 'admin/links.html', md: 'admin/links' },
+        { route: 'admin/index.html', md: 'admin/index' },
+        { route: 'admin/refresh.html', md: 'admin/refresh' },
       ],
     }),
     shortlinks(),

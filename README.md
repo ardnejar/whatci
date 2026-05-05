@@ -17,8 +17,10 @@ Calendar events are cached in Cloudflare KV and updated in real time via Google 
 To manually force a cache refresh and re-register the watch channel, visit:
 
 ```
-https://whatci.org/admin/refresh?key=ADMIN_KEY
+https://whatci.org/admin/refresh
 ```
+
+Access requires a Cloudflare Access one-time PIN sent to your email. You must be on the approved email list.
 
 ## Content Snippetes, Pages and Short Links
 
@@ -95,7 +97,7 @@ Both scripts print a summary: event count, download size, request time, and writ
 |---|---|
 | [/calendar-events](/calendar-events) | Calendar events from KV cache as `CalendarEvent[]` JSON. Triggers a blocking fetch on cold start; background refresh when stale. |
 | [/calendar-webhook](/calendar-webhook) | Receives Google Calendar push notifications (POST). Verifies the channel token and immediately refreshes KV on event changes. |
-| [/admin/refresh?key=ADMIN_KEY](/admin/refresh?key=ADMIN_KEY) | Force-refreshes the KV cache from Google Calendar and re-registers the push notification watch channel. Requires `ADMIN_KEY`. Redirects to homepage on success. |
+| [/admin/refresh](/admin/refresh) | Force-refreshes the KV cache from Google Calendar and re-registers the push notification watch channel. Protected by Cloudflare Access (OTP). Redirects to homepage on success. |
 | [/json-ld](/json-ld) | The schema.org `ItemList` JSON-LD payload that gets injected into the page — events for the next 6 months, merged. Useful for inspection. |
 | `/<slug>` | Redirects to the destination URL for any slug with `"redirect": true` in `content/links.json`. |
 

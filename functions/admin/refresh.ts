@@ -1,42 +1,22 @@
-import type { Env } from '../lib/google-calendar.ts'
+import type { Env as CalendarEnv } from '../lib/google-calendar.ts'
 import { refreshKv, registerWatchChannel } from '../lib/google-calendar.ts'
 
-const COOKIE_NAME = 'admin_key'
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 180 // 180 days
-
-/**
-  Reads a cookie value by name from a Cookie header string.
-**/
-const getCookie = (cookieHeader: string, name: string): string | null => {
-  for (const part of cookieHeader.split(';')) {
-    const [key, value] = part.trim().split('=')
-    if (key === name && value !== undefined) return decodeURIComponent(value)
-  }
-  return null
+interface Env extends CalendarEnv {
+  ASSETS: Fetcher
 }
 
 /**
-  Force-refreshes the KV calendar cache by fetching directly from Google Calendar.
-  Authenticates via the `key` query parameter on first use; subsequent requests
-  may use the admin_key cookie set on successful authentication.
-  Redirects to the homepage on success.
+  Serves the admin refresh UI (GET) and performs a KV cache refresh (POST).
+  Access is controlled by Cloudflare Access (OTP).
 
-  @example
-  GET /admin/refresh?key=YOUR_ADMIN_KEY
+  GET  /admin/refresh — serves the static refresh page
+  POST /admin/refresh — refreshes the KV cache and watch channel, returns JSON
 **/
 export const onRequestGet = async ({ request, env }: { request: Request; env: Env }): Promise<Response> => {
-  const { searchParams } = new URL(request.url)
-  const cookieHeader = request.headers.get('Cookie') ?? ''
-  const cookieKey = getCookie(cookieHeader, COOKIE_NAME)
-  const queryKey = searchParams.get('key')
+  return env.ASSETS.fetch(request)
+}
 
-  const key = queryKey ?? cookieKey
-
-  if (key !== env.ADMIN_KEY) {
-    console.log('[admin/refresh] Unauthorized — key mismatch')
-    return new Response('Unauthorized', { status: 401 })
-  }
-
+export const onRequestPost = async ({ env }: { env: Env }): Promise<Response> => {
   console.log('[admin/refresh] Refreshing KV cache')
   await refreshKv(env)
 
@@ -45,18 +25,10 @@ export const onRequestGet = async ({ request, env }: { request: Request; env: En
     await registerWatchChannel(env)
     console.log('[admin/refresh] Watch channel registered successfully')
   } catch (err) {
-    console.log(`[admin/refresh] Watch channel registration failed: ${err instanceof Error ? err.message : String(err)}`)
-    return new Response(`Watch channel registration failed: ${err instanceof Error ? err.message : String(err)}`, { status: 500 })
+    const error = err instanceof Error ? err.message : String(err)
+    console.log(`[admin/refresh] Watch channel registration failed: ${error}`)
+    return Response.json({ ok: false, error }, { status: 500 })
   }
 
-  const headers = new Headers({ Location: '/' })
-
-  if (queryKey !== null) {
-    headers.set(
-      'Set-Cookie',
-      `${COOKIE_NAME}=${encodeURIComponent(key)}; Max-Age=${COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=Strict; Path=/admin/refresh`
-    )
-  }
-
-  return new Response(null, { status: 302, headers })
+  return Response.json({ ok: true })
 }

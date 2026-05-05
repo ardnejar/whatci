@@ -28,16 +28,10 @@ if (is_remote) {
 }
 
 if (!is_remote) {
-  const admin_key = process.env.ADMIN_KEY
-  if (!admin_key) {
-    console.error('ADMIN_KEY is not set in .dev.vars — cannot refresh KV.')
-    process.exit(1)
-  }
-  const refresh_url = `${base_url}/admin/refresh?key=${encodeURIComponent(admin_key)}`
   const refresh_start = Date.now()
-  const refresh_res = await fetch(refresh_url, { redirect: 'manual' })
+  const refresh_res = await fetch(`${base_url}/admin/refresh`, { redirect: 'manual' })
   const refresh_ms = Date.now() - refresh_start
-  if (refresh_res.status !== 302 && refresh_res.status !== 200) {
+  if (!refresh_res.ok) {
     const body = await refresh_res.text()
     console.error(`KV refresh failed: ${refresh_res.status} ${refresh_res.statusText}\n${body}`)
     process.exit(1)

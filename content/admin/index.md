@@ -13,13 +13,13 @@ Events are pulled from the [**What CI Google Calendar**](/calendar) and cached f
 
 ### Cache Updates
 
-Changes in Google Calendar should appear on the site within seconds — Google sends a push notification to the site on every calendar change. In case the notification doesn't go through, you can manually force a cache refresh, visit:
+Changes in Google Calendar should appear on the site within seconds — Google sends a push notification to the site on every calendar change. In case the notification doesn't go through, you can manually force a cache refresh by visiting:
 
 ```
-https://whatci.org/admin/refresh?key=ADMIN_KEY
+https://whatci.org/admin/refresh
 ```
 
-- Get the `ADMIN_KEY` from a What CI team member.
+- Access requires a one-time PIN sent to your email. You must be on the approved email list to access the admin section.
 
 - On success, you are redirected to the homepage.
 

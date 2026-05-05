@@ -6,12 +6,10 @@ import type { Plugin, ResolvedConfig, ViteDevServer } from 'vite'
 const CONTENT_DIR = 'content'
 
 export interface PageEntry {
-  /** Output path relative to dist root, e.g. "links.html" or "admin/help.html" */
+  /** Output path relative to dist root, e.g. "admin/help.html" */
   route: string
-  /** Basename of the .md file in /content without extension, e.g. "links" or "admin-help" */
+  /** Path to the .md file in /content without extension, e.g. "admin/help" */
   md: string
-  /** Value for the <title> element */
-  title: string
 }
 
 /**
@@ -21,8 +19,8 @@ export interface PageEntry {
   with the parsed HTML of the corresponding .md file.
 
   For pages listed in the `pages` option, a single app.html template is used. Each page
-  replaces %TITLE% and %CONTENT% from its .md file, and is emitted
-  at its declared route during build. app.html itself is not emitted.
+  replaces %TITLE% (taken from the first # heading in the .md file) and %CONTENT%, and
+  is emitted at its declared route during build. app.html itself is not emitted.
 **/
 export function content(options: { pages?: PageEntry[] } = {}): Plugin {
   const pages = options.pages ?? []
@@ -44,12 +42,18 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
     return `<section class="${name}">${html.trim()}</section>`
   }
 
+  function extractTitle(mdPath: string): string {
+    const source = readFileSync(mdPath, 'utf8')
+    const match = source.match(/^#\s+(.+)$/m)
+    if (!match) return ''
+    return match[1].replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').trim()
+  }
+
   function renderPage(page: PageEntry, appHtml: string): string {
     const mdPath = `${CONTENT_DIR}/${page.md}.md`
-    const content = buildBlock(mdPath)
     return appHtml
-      .replace('%TITLE%', page.title)
-      .replace('%CONTENT%', content)
+      .replace('%TITLE%', extractTitle(mdPath))
+      .replace('%CONTENT%', buildBlock(mdPath))
   }
 
   /** Derive the dev-server URL path from a route, e.g. "admin/help.html" → "/admin/help" */
@@ -77,8 +81,7 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
 
     transformIndexHtml: {
       order: 'pre',
-      handler(html: string, ctx): string {
-        // For all HTML files, inject %NAME% placeholders from .md files
+      handler(html: string): string {
         for (const filePath of mdFiles()) {
           html = html.replace(placeholder(filePath), buildBlock(filePath))
         }
@@ -104,19 +107,20 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
     },
 
     configureServer(server: ViteDevServer) {
-      // Watch all .md files used by standard pages
-      for (const filePath of mdFiles()) {
-        const absPath = resolve(filePath)
+      const watchReload = (absPath: string) => {
         server.watcher.add(absPath)
         server.watcher.on('change', (file: string) => {
-          if (file === absPath) {
-            server.ws.send({ type: 'full-reload' })
-          }
+          if (file === absPath) server.ws.send({ type: 'full-reload' })
         })
       }
 
-      // Serve app.html with injected content for each declared page route
+      for (const filePath of mdFiles()) watchReload(resolve(filePath))
+
       if (pages.length === 0) return
+
+      for (const page of pages) watchReload(resolve(`${CONTENT_DIR}/${page.md}.md`))
+
+      // Serve app.html with injected content for each declared page route
       server.middlewares.use(async (req, res, next) => {
         const url = req.url?.split('?')[0] ?? ''
         const page = pages.find((p) => routeToUrlPath(p.route) === url)

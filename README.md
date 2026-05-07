@@ -6,6 +6,8 @@ Production: https://whatci.org/
 
 Staging: https://preview.whatci.pages.dev
 
+The preview site uses a separate KV namespace (`CALENDAR_KV_preview`) so it never affects production data. It does not have Google Calendar webhook secrets configured, so its KV cache is **not** kept up to date automatically. To populate or refresh the preview cache, visit `https://preview.whatci.pages.dev/admin/refresh` manually.
+
 ## Calendar Integration
 
 Cloudflare web workers

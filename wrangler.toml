@@ -5,3 +5,9 @@ compatibility_date = "2026-04-26"
 [[kv_namespaces]]
 binding = "CALENDAR_KV"
 id = "3ba95e19ce364d1a8fd0f2a6bfc5125c"
+preview_id = "5ad5f125c1e044dabaf9d14d03db851f"
+
+[env.preview]
+[[env.preview.kv_namespaces]]
+binding = "CALENDAR_KV"
+id = "5ad5f125c1e044dabaf9d14d03db851f"

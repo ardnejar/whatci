@@ -74,9 +74,7 @@ export function content(options: { pages?: PageEntry[] } = {}): Plugin {
   const md = buildMarked()
 
   function buildBlock(filePath: string): string {
-    const html = md.parse(readFileSync(filePath, 'utf8')) as string
-    const name = basename(filePath, '.md')
-    return `<section class="${name}">${html.trim()}</section>`
+    return (md.parse(readFileSync(filePath, 'utf8')) as string).trim()
   }
 
   function extractTitle(mdPath: string): string {

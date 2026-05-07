@@ -29,14 +29,14 @@
       }
       body {
         width: 100vw;
+        max-width: 540px;
         min-height: 100dvh;
         display: flex;
-        /* align-items: center; */
+        flex-direction: column;
         justify-content: center;
         padding: 0;
-        margin: 0;
+        margin: auto;
         background: #000;
-        /* font-family: 'Lucida Grande', sans-serif; */
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         color: #fff;
       }
@@ -44,7 +44,7 @@
         width: 100vw;
         max-width: 540px;
         container-type: inline-size;
-        margin-bottom: 6rem;
+        margin-bottom: 3rem;
       }
       section {
         margin-top: 4rem;
@@ -52,7 +52,7 @@
         padding: var(--content-padding);
         line-height: 1.6;
       }
-      section.events {
+      section#events {
         padding: unset;
       }
       h1 {
@@ -82,12 +82,12 @@
         display: inline-flex;
         vertical-align: text-bottom;
       }
-      .footer .svg-inline svg {
+      footer .svg-inline svg {
         width: 1em;
         height: 1em;
       }
       @container (min-width: 540px) {
-        .footer .svg-inline svg {
+        footer .svg-inline svg {
           width: 1.5rem;
           height: 1.5rem;
         }
@@ -110,25 +110,28 @@
         height: 1px;
         background: linear-gradient(100deg, var(--highlight-color), var(--datetime-color), var(--link-color));
       }
-      .footer ul {
+      footer {
+        margin-bottom: 4rem;
+      }
+      footer ul {
         list-style: none;
-        padding: 0;
+        padding: var(--content-padding);
         margin-top: 1rem;
         display: flex;
         flex-direction: column;
         gap: 1rem;
       }
-      .footer li {
+      footer li {
         font-size: 2rem;
         font-weight: 1000;
       }
-      @container (min-width: 540px) {
-        .footer ul {
+      @media (min-width: 500px) {
+        footer ul {
           flex-direction: row;
           gap: 1.5rem;
           justify-content: space-between;
         }
-        .footer li {
+        footer li {
           font-size: 1.5rem;
           font-weight: 800;
         }
@@ -151,20 +154,17 @@
   <body>
     <main>
       <article>
-        %MESSAGE%
+        <section id="message">%MESSAGE%</section>
 
-        <section class="events">
+        <section id="events">
           <event-list></event-list>
         </section>
 
-        <!-- Calendar Help -->
-        %CALENDAR_HELP%
-
-        <!-- Footer -->
-        %FOOTER%
+        <section id="calendar-connection">%CALENDAR_CONNECTION%</section>
       </article>
     </main>
 
+    <footer>%FOOTER%</footer>
     <script type="module" src="/src/index.ts"></script>
   </body>
 </html>

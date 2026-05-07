@@ -1,16 +1,20 @@
 # [What CI](/) • Admin
 
-## Calendar Events
+The public site provices SEO for the [**What CI Google Calendar**](/calendar) as well as [Short Links](/admin/links) for the services we use for Bellingham CI community.
 
-Events are pulled from the [**What CI Google Calendar**](/calendar) and cached for the site. Edit events using any interface connected to the calendar, including Apple Calendar.
 
-You can [add the calendar to your Google Account](/calendar-subscribe), or subscribe with any calendar app using the <a-copy href="/ical" message="iCal link copied">iCal URL</a-copy>.
+## Calendar Events data entry
 
-- Each event displays its `title`, `date`, `time`, `location`, and `description`. The `description` supports basic formatting — line breaks are preserved, HTML is not. Preferably one sentence with a URL to the event's full details, or just a plain URL.
+Events are pulled from the [**What CI Google Calendar**](/calendar) and cached for the site. You can [add the calendar to your Google Account](/calendar-subscribe). Edit events using any interface connected to your Google calendar, including Apple Calendar.
 
-- On **Apple Calendar**, the `description` field is labeled `notes`, and the `URL` field is ignored.
+- Be sure to fill in these fields: `title`, `date`, `time`, `location`, and `description`.
+
+- The `description` field supports basic formatting — line breaks are preserved, HTML is stripped. Preferably, keep description one sentence with a URL to the event's full details, or just a plain URL.
+
+- On Apple Calendar, the `description` field is labeled `notes`, and the separate `URL` field is ignored.
 
 - Putting a URL in the `location` field marks it as an online event.
+
 
 ### Cache
 

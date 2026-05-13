@@ -1,5 +1,7 @@
 # What CI — Page and URL Shortener
 
+This repository has been replaced by the [What-CI](https://github.com/ardnejar/what-ci) monorepo.
+
 A Cloudflare Pages site and URL shortener that displays a list of events from the What CI Google Calendar.
 
 Production: https://whatci.org/
